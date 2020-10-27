@@ -42,161 +42,161 @@ Total calls: 19730 (10 _ ((20 + 1 + 1) + 1 + (25 _ 2) + 380 \* 5))
 - Url: https://api-football-v1.p.rapidapi.com/v2/leagues/league/{league_id}
 - Response
 
-  ```json
-  {
-    "api": {
-      "results": 970,
-      "leagues": [
-        {
-          "league_id": 1,
-          "name": "World Cup",
-          "type": "Cup",
-          "country": "World",
-          "country_code": null,
-          "season": 2018,
-          "season_start": "2018-06-14",
-          "season_end": "2018-07-15",
-          "logo": "https://media.api-sports.io/football/leagues/1.png",
-          "flag": null,
-          "standings": 1,
-          "is_current": 1,
-          "coverage": {
-            "standings": true,
-            "fixtures": {
-              "events": true,
-              "lineups": true,
-              "statistics": true,
-              "players_statistics": false
-            },
-            "players": true,
-            "topScorers": true,
-            "predictions": true,
-            "odds": false
-          }
+```json
+{
+  "api": {
+    "results": 970,
+    "leagues": [
+      {
+        "league_id": 1,
+        "name": "World Cup",
+        "type": "Cup",
+        "country": "World",
+        "country_code": null,
+        "season": 2018,
+        "season_start": "2018-06-14",
+        "season_end": "2018-07-15",
+        "logo": "https://media.api-sports.io/football/leagues/1.png",
+        "flag": null,
+        "standings": 1,
+        "is_current": 1,
+        "coverage": {
+          "standings": true,
+          "fixtures": {
+            "events": true,
+            "lineups": true,
+            "statistics": true,
+            "players_statistics": false
+          },
+          "players": true,
+          "topScorers": true,
+          "predictions": true,
+          "odds": false
         }
-      ]
-    }
+      }
+    ]
   }
-  ```
+}
+```
 
 #### Teams By League ID
 
 - Url: https://api-football-v1.p.rapidapi.com/v2/teams/league/{league_id}
 - Response
 
-  ```json
-  {
-    "api": {
-      "results": 5,
-      "teams": [
-        {
-          "team_id": 541,
-          "name": "Real Madrid",
-          "code": null,
-          "logo": "https://media.api-sports.io/football/teams/541.png",
-          "is_national": false,
-          "country": "Spain",
-          "founded": 1902,
-          "venue_name": "Estadio Santiago Bernabéu",
-          "venue_surface": "grass",
-          "venue_address": "Avenida de Concha Espina 1, Chamartín",
-          "venue_city": "Madrid",
-          "venue_capacity": 85454
-        }
-      ]
-    }
+```json
+{
+  "api": {
+    "results": 5,
+    "teams": [
+      {
+        "team_id": 541,
+        "name": "Real Madrid",
+        "code": null,
+        "logo": "https://media.api-sports.io/football/teams/541.png",
+        "is_national": false,
+        "country": "Spain",
+        "founded": 1902,
+        "venue_name": "Estadio Santiago Bernabéu",
+        "venue_surface": "grass",
+        "venue_address": "Avenida de Concha Espina 1, Chamartín",
+        "venue_city": "Madrid",
+        "venue_capacity": 85454
+      }
+    ]
   }
-  ```
+}
+```
 
 #### Coach By Team ID
 
 - Url: https://api-football-v1.p.rapidapi.com/v2/coachs/team/{team_id}
 - Reponse
 
-  ```json
-  {
-    "api": {
-      "results": 1,
-      "coachs": [
-        {
-          "id": 18,
-          "name": "Unai Emery",
-          "firstname": "Unai",
-          "lastname": "Emery Etxegoien",
-          "age": 48,
-          "birth_date": "03/11/1971",
-          "birth_place": "Hondarribia",
-          "birth_country": "Spain",
-          "nationality": "Spain",
-          "height": null,
-          "weight": null,
-          "team": {
-            "id": 42,
-            "name": "Arsenal"
+```json
+{
+  "api": {
+    "results": 1,
+    "coachs": [
+      {
+        "id": 18,
+        "name": "Unai Emery",
+        "firstname": "Unai",
+        "lastname": "Emery Etxegoien",
+        "age": 48,
+        "birth_date": "03/11/1971",
+        "birth_place": "Hondarribia",
+        "birth_country": "Spain",
+        "nationality": "Spain",
+        "height": null,
+        "weight": null,
+        "team": {
+          "id": 42,
+          "name": "Arsenal"
+        },
+        "career": [
+          {
+            "team": {
+              "id": 42,
+              "name": "Arsenal"
+            },
+            "start": "23/05/2018",
+            "end": null
           },
-          "career": [
-            {
-              "team": {
-                "id": 42,
-                "name": "Arsenal"
-              },
-              "start": "23/05/2018",
-              "end": null
+          {
+            "team": {
+              "id": 85,
+              "name": "PSG"
             },
-            {
-              "team": {
-                "id": 85,
-                "name": "PSG"
-              },
-              "start": "28/06/2016",
-              "end": "23/05/2018"
+            "start": "28/06/2016",
+            "end": "23/05/2018"
+          },
+          {
+            "team": {
+              "id": 536,
+              "name": "Sevilla"
             },
-            {
-              "team": {
-                "id": 536,
-                "name": "Sevilla"
-              },
-              "start": "15/01/2013",
-              "end": "12/06/2016"
+            "start": "15/01/2013",
+            "end": "12/06/2016"
+          },
+          {
+            "team": {
+              "id": 558,
+              "name": "Spartak Moskva"
             },
-            {
-              "team": {
-                "id": 558,
-                "name": "Spartak Moskva"
-              },
-              "start": "10/06/2012",
-              "end": "25/11/2012"
+            "start": "10/06/2012",
+            "end": "25/11/2012"
+          },
+          {
+            "team": {
+              "id": 532,
+              "name": "Valencia"
             },
-            {
-              "team": {
-                "id": 532,
-                "name": "Valencia"
-              },
-              "start": "01/07/2008",
-              "end": "10/06/2012"
+            "start": "01/07/2008",
+            "end": "10/06/2012"
+          },
+          {
+            "team": {
+              "id": 723,
+              "name": "Almería"
             },
-            {
-              "team": {
-                "id": 723,
-                "name": "Almería"
-              },
-              "start": "01/07/2006",
-              "end": "30/06/2008"
+            "start": "01/07/2006",
+            "end": "30/06/2008"
+          },
+          {
+            "team": {
+              "id": null,
+              "name": "Lorca Deportiva CF"
             },
-            {
-              "team": {
-                "id": null,
-                "name": "Lorca Deportiva CF"
-              },
-              "start": "01/11/2004",
-              "end": "30/06/2006"
-            }
-          ]
-        }
-      ]
-    }
+            "start": "01/11/2004",
+            "end": "30/06/2006"
+          }
+        ]
+      }
+    ]
   }
-  ```
+}
+```
 
 #### Transfer By Team ID
 
