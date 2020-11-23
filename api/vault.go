@@ -16,8 +16,9 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://jsonplaceholder.typicode.com/"
-	userAgent      = "rapid-api"
+	defaultBaseURL = "https://api-football-v1.p.rapidapi.com/v2/"
+	rapidApiHost   = "api-football-v1.p.rapidapi.com"
+	rapidApiKey    = "U4y3LniAIdmsh1SryySGibO7k8ELp1syFPvjsnpHOQNWAvpJAk"
 
 	//Meadia TYpe values
 	defaultMediaType = "application/octet-stream"
@@ -40,7 +41,16 @@ type Client struct {
 	common service //Reuse a sing struct instead of allocation one for each service on the heap
 
 	// Services
-	Users *UserService
+	Users               *UserService
+	LeagueService       *LeagueService
+	TeamService         *TeamService
+	FixtureService      *FixtureService
+	FixtureEventService *FixtureEventService
+	PlayerService       *PlayerService
+	PlayerStatService   *PlayerStatService
+	StandingService     *StandingService
+	TopScorerService    *TopScorerService
+	LinuUpService       *LinuUpService
 }
 
 type service struct {
@@ -174,10 +184,16 @@ func NewClient(httpClient *http.Client) *Client {
 
 	baseURL, _ := url.Parse(defaultBaseURL)
 
-	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
+	c := &Client{client: httpClient, BaseURL: baseURL}
 	c.common.client = c
 	c.Users = (*UserService)(&c.common)
-
+	c.LeagueService = (*LeagueService)(&c.common)
+	c.TeamService = (*TeamService)(&c.common)
+	c.FixtureService = (*FixtureService)(&c.common)
+	c.FixtureEventService = (*FixtureEventService)(&c.common)
+	c.PlayerService = (*PlayerService)(&c.common)
+	c.PlayerStatService = (*PlayerStatService)(&c.common)
+	c.TopScorerService = (*TopScorerService)(&c.common)
 	return c
 }
 
@@ -217,6 +233,8 @@ func (c *Client) NewRequest(method, url string, body interface{}) (*http.Request
 		req.Header.Set("Content-Type", "application/json")
 	}
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("x-rapidapi-host", rapidApiHost)
+	req.Header.Set("x-rapidapi-key", "U4y3LniAIdmsh1SryySGibO7k8ELp1syFPvjsnpHOQNWAvpJAk")
 
 	if c.UserAgent != "" {
 		req.Header.Set("User-Agent", c.UserAgent)
