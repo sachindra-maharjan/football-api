@@ -1,0 +1,46 @@
+{
+    "api": {
+        "results": 1,
+        "standings": [
+            [
+                {
+                    "rank": 1,
+                    "team_id": 50,
+                    "teamName": "Manchester City",
+                    "logo": "https://media.api-sports.io/football/teams/50.png",
+                    "group": "Premier League",
+                    "forme": "WWWWW",
+                    "status": "",
+                    "description": "Promotion - Champions League (Group Stage)",
+                    "all": {
+                        "matchsPlayed": 38,
+                        "win": 32,
+                        "draw": 2,
+                        "lose": 4,
+                        "goalsFor": 95,
+                        "goalsAgainst": 23
+                    },
+                    "home": {
+                        "matchsPlayed": 19,
+                        "win": 18,
+                        "draw": 0,
+                        "lose": 1,
+                        "goalsFor": 57,
+                        "goalsAgainst": 12
+                    },
+                    "away": {
+                        "matchsPlayed": 19,
+                        "win": 14,
+                        "draw": 2,
+                        "lose": 3,
+                        "goalsFor": 38,
+                        "goalsAgainst": 11
+                    },
+                    "goalsDiff": 72,
+                    "points": 98,
+                    "lastUpdate": "2019-05-12"
+                }
+            ]
+        ]
+    }
+}

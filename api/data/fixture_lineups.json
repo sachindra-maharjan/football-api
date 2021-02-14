@@ -1,0 +1,277 @@
+{
+    "api": {
+        "results": 2,
+        "lineUps": {
+            "Manchester United": {
+                "coach": "José Mourinho",
+                "coach_id": 2462,
+                "formation": "4-3-3",
+                "startXI": [
+                    {
+                        "team_id": 33,
+                        "player_id": 882,
+                        "player": "David de Gea",
+                        "number": 1,
+                        "pos": "G"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 887,
+                        "player": "M. Darmian",
+                        "number": 36,
+                        "pos": "D"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 889,
+                        "player": "V. Lindelöf",
+                        "number": 2,
+                        "pos": "D"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 891,
+                        "player": "L. Shaw",
+                        "number": 23,
+                        "pos": "D"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 885,
+                        "player": "E. Bailly",
+                        "number": 3,
+                        "pos": "D"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 901,
+                        "player": "Mata",
+                        "number": 8,
+                        "pos": "F"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 904,
+                        "player": "P. Pogba",
+                        "number": 6,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 905,
+                        "player": "Fred",
+                        "number": 17,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 899,
+                        "player": "Andreas Pereira",
+                        "number": 15,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 910,
+                        "player": "A. Sánchez",
+                        "number": 7,
+                        "pos": "F"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 909,
+                        "player": "M. Rashford",
+                        "number": 10,
+                        "pos": "F"
+                    }
+                ],
+                "substitutes": [
+                    {
+                        "team_id": 33,
+                        "player_id": 907,
+                        "player": "R. Lukaku",
+                        "number": 9,
+                        "pos": "F"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 903,
+                        "player": "S. McTominay",
+                        "number": 39,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 12753,
+                        "player": "M. Fellaini",
+                        "number": 27,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 908,
+                        "player": "A. Martial",
+                        "number": 11,
+                        "pos": "F"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 892,
+                        "player": "C. Smalling",
+                        "number": 12,
+                        "pos": "D"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 883,
+                        "player": "L. Grant",
+                        "number": 13,
+                        "pos": "G"
+                    },
+                    {
+                        "team_id": 33,
+                        "player_id": 894,
+                        "player": "A. Young",
+                        "number": 18,
+                        "pos": "D"
+                    }
+                ]
+            },
+            "Leicester": {
+                "coach": "C. Puel",
+                "coach_id": 43,
+                "formation": "4-2-3-1",
+                "startXI": [
+                    {
+                        "team_id": 46,
+                        "player_id": 2728,
+                        "player": "K. Schmeichel",
+                        "number": 1,
+                        "pos": "G"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 18774,
+                        "player": "W. Morgan",
+                        "number": 5,
+                        "pos": "D"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 2935,
+                        "player": "H. Maguire",
+                        "number": 15,
+                        "pos": "D"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 18771,
+                        "player": "Ricardo Pereira",
+                        "number": 14,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 2933,
+                        "player": "B. Chilwell",
+                        "number": 3,
+                        "pos": "D"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 114,
+                        "player": "Adrien Silva",
+                        "number": 23,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 3421,
+                        "player": "D. Amartey",
+                        "number": 18,
+                        "pos": "D"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 18786,
+                        "player": "W. Ndidi",
+                        "number": 25,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 18781,
+                        "player": "D. Gray",
+                        "number": 7,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 18784,
+                        "player": "J. Maddison",
+                        "number": 10,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 2778,
+                        "player": "K. Iheanacho",
+                        "number": 8,
+                        "pos": "F"
+                    }
+                ],
+                "substitutes": [
+                    {
+                        "team_id": 46,
+                        "player_id": 18788,
+                        "player": "J. Vardy",
+                        "number": 9,
+                        "pos": "F"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 18780,
+                        "player": "R. Ghezzal",
+                        "number": 31,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 1699,
+                        "player": "Vicente Iborra",
+                        "number": 21,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 18772,
+                        "player": "J. Evans",
+                        "number": 6,
+                        "pos": "D"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 18777,
+                        "player": "M. Albrighton",
+                        "number": 11,
+                        "pos": "M"
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 18146,
+                        "player": "D. Ward",
+                        "number": 12,
+                        "pos": null
+                    },
+                    {
+                        "team_id": 46,
+                        "player_id": 18773,
+                        "player": "C. Fuchs",
+                        "number": 28,
+                        "pos": "D"
+                    }
+                ]
+            }
+        }
+    }
+}

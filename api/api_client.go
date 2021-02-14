@@ -17,8 +17,8 @@ import (
 
 const (
 	defaultBaseURL = "https://api-football-v1.p.rapidapi.com/v2/"
-	rapidApiHost   = "api-football-v1.p.rapidapi.com"
-	rapidApiKey    = "U4y3LniAIdmsh1SryySGibO7k8ELp1syFPvjsnpHOQNWAvpJAk"
+	rapidAPIHost   = "api-football-v1.p.rapidapi.com"
+	rapidAPIKey    = "U4y3LniAIdmsh1SryySGibO7k8ELp1syFPvjsnpHOQNWAvpJAk"
 
 	//Meadia TYpe values
 	defaultMediaType = "application/octet-stream"
@@ -41,16 +41,16 @@ type Client struct {
 	common service //Reuse a sing struct instead of allocation one for each service on the heap
 
 	// Services
-	Users               *UserService
-	LeagueService       *LeagueService
-	TeamService         *TeamService
-	FixtureService      *FixtureService
-	FixtureEventService *FixtureEventService
-	PlayerService       *PlayerService
-	PlayerStatService   *PlayerStatService
-	StandingService     *StandingService
-	TopScorerService    *TopScorerService
-	LinuUpService       *LinuUpService
+	Users                *UserService
+	LeagueService        *LeagueService
+	TeamService          *TeamService
+	FixtureService       *FixtureService
+	FixtureEventService  *FixtureEventService
+	PlayerService        *PlayerService
+	PlayerStatService    *PlayerStatService
+	StandingService      *StandingService
+	TopScorerService     *TopScorerService
+	FixtureLineUpService *FixtureLineUpService
 }
 
 type service struct {
@@ -145,6 +145,7 @@ func (e *Error) Error() string {
 		e.Code, e.Field, e.Resource)
 }
 
+//UnmarshalJSON Unmarshall object to json string
 func (e *Error) UnmarshalJSON(data []byte) error {
 	type aliasError Error // avoid infinite recursion by using type alias.
 	if err := json.Unmarshal(data, (*aliasError)(e)); err != nil {
@@ -153,6 +154,7 @@ func (e *Error) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+//ErrorResponse  Http Response
 type ErrorResponse struct {
 	Response *http.Response // HTTP response that caused this error
 	Message  string         `json:"message"` // error message
@@ -191,9 +193,11 @@ func NewClient(httpClient *http.Client) *Client {
 	c.TeamService = (*TeamService)(&c.common)
 	c.FixtureService = (*FixtureService)(&c.common)
 	c.FixtureEventService = (*FixtureEventService)(&c.common)
+	c.FixtureLineUpService = (*FixtureLineUpService)(&c.common)
 	c.PlayerService = (*PlayerService)(&c.common)
 	c.PlayerStatService = (*PlayerStatService)(&c.common)
 	c.TopScorerService = (*TopScorerService)(&c.common)
+	c.StandingService = (*StandingService)(&c.common)
 	return c
 }
 
@@ -233,8 +237,8 @@ func (c *Client) NewRequest(method, url string, body interface{}) (*http.Request
 		req.Header.Set("Content-Type", "application/json")
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("x-rapidapi-host", rapidApiHost)
-	req.Header.Set("x-rapidapi-key", "U4y3LniAIdmsh1SryySGibO7k8ELp1syFPvjsnpHOQNWAvpJAk")
+	req.Header.Set("x-rapidapi-host", rapidAPIHost)
+	req.Header.Set("x-rapidapi-key", rapidAPIKey)
 
 	if c.UserAgent != "" {
 		req.Header.Set("User-Agent", c.UserAgent)

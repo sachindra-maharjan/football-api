@@ -1,5 +1,10 @@
 package api
 
+import (
+	"context"
+	"fmt"
+)
+
 //FixtureEventService gets the events of fixtures from api
 type FixtureEventService service
 
@@ -24,4 +29,20 @@ type FixtureEvent struct {
 	Type           string `json:"type"`
 	Detail         string `json:"detail"`
 	Comments       string `json:"comments,omitempty"`
+}
+
+//GetFixtureEvent Returns events of a fixture
+func (fe *FixtureEventService) GetFixtureEvent(context context.Context, fixtureID int) (*FixtureEventResult, *Response, error) {
+	req, err := fe.client.NewRequest("GET", "events/"+fmt.Sprint(fixtureID), nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var fixtureEventResult *FixtureEventResult
+	resp, err := fe.client.Do(context, req, &fixtureEventResult)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return fixtureEventResult, resp, nil
 }
