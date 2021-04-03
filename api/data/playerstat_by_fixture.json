@@ -1,0 +1,1600 @@
+{
+    "api": {
+        "results": 27,
+        "players": [
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35931,
+                "player_name": "Sebastián Sosa",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 13,
+                "position": "G",
+                "rating": "6.3",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 1,
+                    "assists": 0,
+                    "saves": 1
+                },
+                "passes": {
+                    "total": 17,
+                    "key": 0,
+                    "accuracy": 68
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 0,
+                    "won": 0
+                },
+                "dribbles": {
+                    "attempts": 0,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 0,
+                    "committed": 0
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35661,
+                "player_name": "Joaquín Martínez",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 23,
+                "position": "D",
+                "rating": "6.9",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 12,
+                    "key": 1,
+                    "accuracy": 70
+                },
+                "tackles": {
+                    "total": 1,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 8,
+                    "won": 7
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 1,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 2,
+                    "committed": 1
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 2570,
+                "player_name": "Gabriel Achilier",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 24,
+                "position": "D",
+                "rating": "6.5",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 24,
+                    "key": 0,
+                    "accuracy": 63
+                },
+                "tackles": {
+                    "total": 2,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 12,
+                    "won": 6
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 1,
+                    "past": 1
+                },
+                "fouls": {
+                    "drawn": 2,
+                    "committed": 4
+                },
+                "cards": {
+                    "yellow": 1,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 2556,
+                "player_name": "Sebastián Vegas",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 6,
+                "position": "D",
+                "rating": "7.6",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 3,
+                    "on": 1
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 30,
+                    "key": 0,
+                    "accuracy": 81
+                },
+                "tackles": {
+                    "total": 4,
+                    "blocks": 0,
+                    "interceptions": 2
+                },
+                "duels": {
+                    "total": 12,
+                    "won": 10
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 1,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 2,
+                    "committed": 0
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35937,
+                "player_name": "Efrain Velarde",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 2,
+                "position": "D",
+                "rating": "6.7",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 16,
+                    "key": 2,
+                    "accuracy": 72
+                },
+                "tackles": {
+                    "total": 3,
+                    "blocks": 0,
+                    "interceptions": 1
+                },
+                "duels": {
+                    "total": 10,
+                    "won": 5
+                },
+                "dribbles": {
+                    "attempts": 0,
+                    "success": 0,
+                    "past": 1
+                },
+                "fouls": {
+                    "drawn": 1,
+                    "committed": 1
+                },
+                "cards": {
+                    "yellow": 1,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35729,
+                "player_name": "Luis Mendoza",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 21,
+                "position": "M",
+                "rating": "7.1",
+                "minutes_played": 63,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": 1,
+                "shots": {
+                    "total": 1,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 12,
+                    "key": 4,
+                    "accuracy": 75
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 7,
+                    "won": 4
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 2,
+                    "committed": 1
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35949,
+                "player_name": "Aldo Rocha",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 26,
+                "position": "M",
+                "rating": "6.3",
+                "minutes_played": 90,
+                "captain": "True",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 2,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 35,
+                    "key": 0,
+                    "accuracy": 85
+                },
+                "tackles": {
+                    "total": 2,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 5,
+                    "won": 3
+                },
+                "dribbles": {
+                    "attempts": 0,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 0,
+                    "committed": 3
+                },
+                "cards": {
+                    "yellow": 1,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35946,
+                "player_name": "Mario Osuna",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 8,
+                "position": "M",
+                "rating": "6.6",
+                "minutes_played": 69,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 23,
+                    "key": 2,
+                    "accuracy": 79
+                },
+                "tackles": {
+                    "total": 1,
+                    "blocks": 1,
+                    "interceptions": 2
+                },
+                "duels": {
+                    "total": 9,
+                    "won": 3
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 1,
+                    "committed": 3
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35956,
+                "player_name": "Gastón Lezcano",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 31,
+                "position": "M",
+                "rating": "7.4",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 2,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 18,
+                    "key": 2,
+                    "accuracy": 66
+                },
+                "tackles": {
+                    "total": 1,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 14,
+                    "won": 9
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 1,
+                    "past": 2
+                },
+                "fouls": {
+                    "drawn": 7,
+                    "committed": 1
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 1,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 2455,
+                "player_name": "Fernando Aristeguieta",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 9,
+                "position": "F",
+                "rating": "7.3",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 7,
+                    "on": 1
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 16,
+                    "key": 2,
+                    "accuracy": 57
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 24,
+                    "won": 13
+                },
+                "dribbles": {
+                    "attempts": 0,
+                    "success": 0,
+                    "past": 3
+                },
+                "fouls": {
+                    "drawn": 2,
+                    "committed": 1
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 2429,
+                "player_name": "Edison Flores",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 10,
+                "position": "F",
+                "rating": "7.7",
+                "minutes_played": 72,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": 1,
+                "shots": {
+                    "total": 3,
+                    "on": 1
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 16,
+                    "key": 2,
+                    "accuracy": 76
+                },
+                "tackles": {
+                    "total": 1,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 7,
+                    "won": 6
+                },
+                "dribbles": {
+                    "attempts": 3,
+                    "success": 3,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 1,
+                    "committed": 1
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35948,
+                "player_name": "Candido Ramirez",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 15,
+                "position": "M",
+                "rating": "6.9",
+                "minutes_played": 27,
+                "captain": "False",
+                "substitute": "True",
+                "offsides": null,
+                "shots": {
+                    "total": 1,
+                    "on": 1
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 3,
+                    "key": 0,
+                    "accuracy": 42
+                },
+                "tackles": {
+                    "total": 1,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 6,
+                    "won": 4
+                },
+                "dribbles": {
+                    "attempts": 2,
+                    "success": 1,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 2,
+                    "committed": 1
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35944,
+                "player_name": "Rodrigo Millar",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 20,
+                "position": "M",
+                "rating": "6.5",
+                "minutes_played": 21,
+                "captain": "False",
+                "substitute": "True",
+                "offsides": null,
+                "shots": {
+                    "total": 1,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 5,
+                    "key": 0,
+                    "accuracy": 55
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 2,
+                    "won": 1
+                },
+                "dribbles": {
+                    "attempts": 0,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 0,
+                    "committed": 0
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 49943,
+                "player_name": "Lucas Villafanez",
+                "team_id": 2284,
+                "team_name": "Monarcas",
+                "number": 19,
+                "position": "M",
+                "rating": "6.2",
+                "minutes_played": 18,
+                "captain": "False",
+                "substitute": "True",
+                "offsides": null,
+                "shots": {
+                    "total": 1,
+                    "on": 1
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 10,
+                    "key": 1,
+                    "accuracy": 90
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 1
+                },
+                "duels": {
+                    "total": 1,
+                    "won": 1
+                },
+                "dribbles": {
+                    "attempts": 0,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 0,
+                    "committed": 0
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 2482,
+                "player_name": "Camilo Vargas",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 12,
+                "position": "G",
+                "rating": "8.6",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 5
+                },
+                "passes": {
+                    "total": 13,
+                    "key": 0,
+                    "accuracy": 41
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 0,
+                    "won": 0
+                },
+                "dribbles": {
+                    "attempts": 0,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 0,
+                    "committed": 0
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 36160,
+                "player_name": "Diego Barbosa",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 15,
+                "position": "D",
+                "rating": "7.3",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 22,
+                    "key": 0,
+                    "accuracy": 71
+                },
+                "tackles": {
+                    "total": 5,
+                    "blocks": 2,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 14,
+                    "won": 9
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 1,
+                    "past": 2
+                },
+                "fouls": {
+                    "drawn": 2,
+                    "committed": 1
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35779,
+                "player_name": "Hugo Nervo",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 2,
+                "position": "D",
+                "rating": "7.0",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 26,
+                    "key": 0,
+                    "accuracy": 68
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 2,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 14,
+                    "won": 5
+                },
+                "dribbles": {
+                    "attempts": 0,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 1,
+                    "committed": 2
+                },
+                "cards": {
+                    "yellow": 1,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35836,
+                "player_name": "Jorge Segura",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 4,
+                "position": "D",
+                "rating": "7.1",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 28,
+                    "key": 0,
+                    "accuracy": 87
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 1,
+                    "interceptions": 1
+                },
+                "duels": {
+                    "total": 8,
+                    "won": 3
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 1,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 0,
+                    "committed": 2
+                },
+                "cards": {
+                    "yellow": 1,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35773,
+                "player_name": "Jesús Angulo",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 27,
+                "position": "D",
+                "rating": "5.9",
+                "minutes_played": 87,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 16,
+                    "key": 0,
+                    "accuracy": 76
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 1
+                },
+                "duels": {
+                    "total": 13,
+                    "won": 5
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 0,
+                    "past": 1
+                },
+                "fouls": {
+                    "drawn": 2,
+                    "committed": 4
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 1,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35856,
+                "player_name": "Edgar Zaldívar",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 6,
+                "position": "M",
+                "rating": "6.8",
+                "minutes_played": 62,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 24,
+                    "key": 0,
+                    "accuracy": 88
+                },
+                "tackles": {
+                    "total": 1,
+                    "blocks": 0,
+                    "interceptions": 1
+                },
+                "duels": {
+                    "total": 2,
+                    "won": 2
+                },
+                "dribbles": {
+                    "attempts": 0,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 1,
+                    "committed": 0
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35849,
+                "player_name": "Jesús Isijara",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 26,
+                "position": "M",
+                "rating": "6.8",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": 1,
+                "shots": {
+                    "total": 1,
+                    "on": 1
+                },
+                "goals": {
+                    "total": 1,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 18,
+                    "key": 0,
+                    "accuracy": 78
+                },
+                "tackles": {
+                    "total": 1,
+                    "blocks": 0,
+                    "interceptions": 1
+                },
+                "duels": {
+                    "total": 15,
+                    "won": 6
+                },
+                "dribbles": {
+                    "attempts": 3,
+                    "success": 2,
+                    "past": 2
+                },
+                "fouls": {
+                    "drawn": 3,
+                    "committed": 2
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35851,
+                "player_name": "Osvaldo Martínez",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 10,
+                "position": "M",
+                "rating": "7.2",
+                "minutes_played": 90,
+                "captain": "True",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 1,
+                    "on": 1
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 1,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 34,
+                    "key": 1,
+                    "accuracy": 87
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 7,
+                    "won": 0
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 0,
+                    "committed": 3
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 36180,
+                "player_name": "Edson Rivera",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 25,
+                "position": "M",
+                "rating": "6.5",
+                "minutes_played": 45,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 15,
+                    "key": 0,
+                    "accuracy": 88
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 6,
+                    "won": 3
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 1,
+                    "past": 1
+                },
+                "fouls": {
+                    "drawn": 2,
+                    "committed": 2
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35864,
+                "player_name": "Ian Torres",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 7,
+                "position": "M",
+                "rating": "6.9",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 1,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 17,
+                    "key": 0,
+                    "accuracy": 89
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 3
+                },
+                "duels": {
+                    "total": 11,
+                    "won": 5
+                },
+                "dribbles": {
+                    "attempts": 2,
+                    "success": 2,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 3,
+                    "committed": 2
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35790,
+                "player_name": "Javier Correa",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 29,
+                "position": "F",
+                "rating": "6.1",
+                "minutes_played": 90,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 9,
+                    "key": 0,
+                    "accuracy": 45
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 1,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 14,
+                    "won": 4
+                },
+                "dribbles": {
+                    "attempts": 4,
+                    "success": 0,
+                    "past": 1
+                },
+                "fouls": {
+                    "drawn": 2,
+                    "committed": 2
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35841,
+                "player_name": "Daniel Aguilar",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 16,
+                "position": "M",
+                "rating": "–",
+                "minutes_played": 3,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 0,
+                    "key": 0,
+                    "accuracy": 0
+                },
+                "tackles": {
+                    "total": 0,
+                    "blocks": 0,
+                    "interceptions": 0
+                },
+                "duels": {
+                    "total": 0,
+                    "won": 0
+                },
+                "dribbles": {
+                    "attempts": 0,
+                    "success": 0,
+                    "past": 0
+                },
+                "fouls": {
+                    "drawn": 0,
+                    "committed": 0
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            },
+            {
+                "event_id": 169080,
+                "updateAt": 1589382135,
+                "player_id": 35843,
+                "player_name": "Andrés Andrade",
+                "team_id": 2283,
+                "team_name": "Atlas",
+                "number": 8,
+                "position": "M",
+                "rating": "6.2",
+                "minutes_played": 45,
+                "captain": "False",
+                "substitute": "False",
+                "offsides": null,
+                "shots": {
+                    "total": 0,
+                    "on": 0
+                },
+                "goals": {
+                    "total": 0,
+                    "conceded": 0,
+                    "assists": 0,
+                    "saves": 0
+                },
+                "passes": {
+                    "total": 7,
+                    "key": 0,
+                    "accuracy": 58
+                },
+                "tackles": {
+                    "total": 1,
+                    "blocks": 0,
+                    "interceptions": 1
+                },
+                "duels": {
+                    "total": 9,
+                    "won": 1
+                },
+                "dribbles": {
+                    "attempts": 1,
+                    "success": 0,
+                    "past": 1
+                },
+                "fouls": {
+                    "drawn": 0,
+                    "committed": 4
+                },
+                "cards": {
+                    "yellow": 0,
+                    "red": 0
+                },
+                "penalty": {
+                    "won": 0,
+                    "commited": 0,
+                    "success": 0,
+                    "missed": 0,
+                    "saved": 0
+                }
+            }
+        ]
+    }
+}

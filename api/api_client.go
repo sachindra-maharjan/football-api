@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -20,8 +21,22 @@ const (
 	rapidAPIHost   = "api-football-v1.p.rapidapi.com"
 	rapidAPIKey    = "U4y3LniAIdmsh1SryySGibO7k8ELp1syFPvjsnpHOQNWAvpJAk"
 
+	headerRateLimit      = "x-ratelimit-requests-limit"
+	headerRateRemaining  = "x-ratelimit-requests-remaining"
+	headerRateLimitReset = "x-ratelimit-requests-reset"
+
 	//Meadia TYpe values
 	defaultMediaType = "application/octet-stream"
+)
+
+var (
+	apiKeys = map[string]string{
+		"key1": "U4y3LniAIdmsh1SryySGibO7k8ELp1syFPvjsnpHOQNWAvpJAk",
+		"key2": "fb43974268msh3572919d41d6618p13d954jsn33a929b62a3e",
+		"key3": "c51e5b8904mshceec0852f5862a4p177382jsn7eda4122238b",
+		"key4": "d449529368msh69f30acee47f6f0p1c4735jsn009552b076ae",
+		"key5": "fc4476d75amsh2e54b90d81a1dd8p14c6cejsn82aed8cbba4d",
+	}
 )
 
 //Client manages communication to REST API
@@ -35,13 +50,13 @@ type Client struct {
 
 	UserAgent string
 
+	authKey   string
 	rateMu    sync.Mutex
 	rateLimit Rate
 
 	common service //Reuse a sing struct instead of allocation one for each service on the heap
 
 	// Services
-	Users                *UserService
 	LeagueService        *LeagueService
 	TeamService          *TeamService
 	FixtureService       *FixtureService
@@ -186,9 +201,8 @@ func NewClient(httpClient *http.Client) *Client {
 
 	baseURL, _ := url.Parse(defaultBaseURL)
 
-	c := &Client{client: httpClient, BaseURL: baseURL}
+	c := &Client{client: httpClient, BaseURL: baseURL, authKey: rapidAPIKey}
 	c.common.client = c
-	c.Users = (*UserService)(&c.common)
 	c.LeagueService = (*LeagueService)(&c.common)
 	c.TeamService = (*TeamService)(&c.common)
 	c.FixtureService = (*FixtureService)(&c.common)
@@ -238,7 +252,7 @@ func (c *Client) NewRequest(method, url string, body interface{}) (*http.Request
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("x-rapidapi-host", rapidAPIHost)
-	req.Header.Set("x-rapidapi-key", rapidAPIKey)
+	req.Header.Set("x-rapidapi-key", c.authKey)
 
 	if c.UserAgent != "" {
 		req.Header.Set("User-Agent", c.UserAgent)
@@ -252,8 +266,13 @@ func (c *Client) NewRequest(method, url string, body interface{}) (*http.Request
 // r must not be nil
 func newResponse(r *http.Response) *Response {
 	response := &Response{Response: r}
-	//parse rate here
-	//response.Rate = parseRate
+
+	rateLimit, _ := strconv.Atoi(r.Header.Get(headerRateLimit))
+	rateRemaining, _ := strconv.Atoi(r.Header.Get(headerRateRemaining))
+
+	response.Rate.Limit = rateLimit
+	response.Rate.Remaining = rateRemaining
+
 	return response
 }
 

@@ -15,7 +15,7 @@ func main() {
 		fmt.Printf("Error: %v \n", err)
 	}
 
-	csvutil.WriteNew("./league.csv", data)
+	err = csvutil.Write("2020/league/league.csv", data)
 	if err != nil {
 		log.Fatalf("util.WriteNew returned error %v", err)
 	}

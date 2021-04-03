@@ -1,5 +1,10 @@
 package api
 
+import (
+	"context"
+	"fmt"
+)
+
 //PlayerStatService gets the player statistic for fixtures from api
 type PlayerStatService service
 
@@ -13,60 +18,78 @@ type PlayerStatResult struct {
 
 //PlayerStat contains player statistics for a fixture
 type PlayerStat struct {
-	EventID       int    `json:"event_id"`
-	UpdatedAt     int    `json:"updateAt"`
-	PlayerID      int    `json:"player_id"`
-	PlayerName    string `json:"player_name"`
-	TeamID        int    `json:"team_id"`
-	Number        int    `json:"number"`
-	Position      int    `json:"position"`
+	EventID       int    `json:"event_id,omitempty"`
+	UpdatedAt     int    `json:"updateAt,omitempty"`
+	PlayerID      int    `json:"player_id,omitempty"`
+	PlayerName    string `json:"player_name,omitempty"`
+	TeamID        int    `json:"team_id,omitempty"`
+	TeamName      string `json:"team_name,omitempty"`
+	Number        int    `json:"number,omitempty"`
+	Position      string `json:"position,omitempty"`
 	Rating        string `json:"rating,omitempty"`
-	MinutesPlayed int    `json:"minutes_played"`
-	Captain       string `json:"captain"`
-	Substitute    string `json:"substitute"`
+	MinutesPlayed int    `json:"minutes_played,omitempty"`
+	Captain       string `json:"captain,omitempty"`
+	Substitute    string `json:"substitute,omitempty"`
 	Offsides      int    `json:"offsides,omitempty"`
 	Shots         struct {
-		Total int `json:"total"`
-		On    int `json:"on"`
+		Total int `json:"total,omitempty"`
+		On    int `json:"on,omitempty"`
 	} `json:"shots"`
 	Goals struct {
-		Total    int `json:"total"`
-		Conceded int `json:"conceded"`
-		Assists  int `json:"assists"`
-		Saves    int `json:"saves"`
+		Total    int `json:"total,omitempty"`
+		Conceded int `json:"conceded,omitempty"`
+		Assists  int `json:"assists,omitempty"`
+		Saves    int `json:"saves,omitempty"`
 	} `json:"goals"`
 	Passes struct {
-		Total    int `json:"total"`
-		Key      int `json:"key"`
-		Accuracy int `json:"accuracy"`
-	} `json:"passes"`
+		Total    int `json:"total,omitempty"`
+		Key      int `json:"key,omitempty"`
+		Accuracy int `json:"accuracy,omitempty"`
+	} `json:"passes,omitempty"`
 	Tackles struct {
-		Total         int `json:"total"`
-		Blocks        int `json:"blocks"`
-		Interceptions int `json:"interceptions"`
-	} `json:"tackles"`
+		Total         int `json:"total,omitempty"`
+		Blocks        int `json:"blocks,omitempty"`
+		Interceptions int `json:"interceptions,omitempty"`
+	} `json:"tackles,omitempty"`
 	Duels struct {
-		Total int `json:"total"`
-		Won   int `json:"won"`
-	} `json:"duels"`
+		Total int `json:"total,omitempty"`
+		Won   int `json:"won,omitempty"`
+	} `json:"duels,omitempty"`
 	Dribbles struct {
-		Attempts int `json:"attempts"`
-		Success  int `json:"success"`
-		Past     int `json:"past"`
-	} `json:"dribbles"`
+		Attempts int `json:"attempts,omitempty"`
+		Success  int `json:"success,omitempty"`
+		Past     int `json:"past,omitempty"`
+	} `json:"dribbles,omitempty"`
 	Fouls struct {
-		Drawn     int `json:"drawn"`
-		Committed int `json:"committed"`
-	} `json:"fouls"`
+		Drawn     int `json:"drawn,omitempty"`
+		Committed int `json:"committed,omitempty"`
+	} `json:"fouls,omitempty"`
 	Cards struct {
-		Yellow string `json:"yellow"`
-		Red    string `json:"red"`
-	} `json:"cards"`
+		Yellow int `json:"yellow,omitempty"`
+		Red    int `json:"red,omitempty"`
+	} `json:"cards,omitempty"`
 	Penalty struct {
-		Won      int `json:"won"`
-		Commited int `json:"commited"`
-		Success  int `json:"success"`
-		Missed   int `json:"missed"`
-		Saved    int `json:"saved"`
-	} `json:"penalty"`
+		Won      int `json:"won,omitempty"`
+		Commited int `json:"commited,omitempty"`
+		Success  int `json:"success,omitempty"`
+		Missed   int `json:"missed,omitempty"`
+		Saved    int `json:"saved,omitempty"`
+	} `json:"penalty,omitempty"`
+}
+
+func (p *PlayerStatService) GetPlayerStatByFixtureID(context context.Context, fixtureID int) (*PlayerStatResult, *Response, error) {
+	r, err := p.client.NewRequest("GET", "players/fixture/"+fmt.Sprint(fixtureID), nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var playerStatResult *PlayerStatResult
+	response, err := p.client.Do(context, r, &playerStatResult)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return playerStatResult, response, nil
+
 }

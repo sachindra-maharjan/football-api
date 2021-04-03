@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 )
 
-//WriteNew creates a new file
+//Write creates if not exists or appends to an existing file
 //writes data in the file
-func WriteNew(file string, data [][]string) error {
-	csvFile, err := os.Create(file)
+func Write(file string, data [][]string) error {
+	csvFile, err := GetFile(file)
 	if err != nil {
 		return err
 	}
@@ -21,6 +21,7 @@ func WriteNew(file string, data [][]string) error {
 	for _, str := range data {
 		if err := w.Write(str); err != nil {
 			log.Fatal("writing to file returned error", err)
+			return err
 		}
 	}
 	w.Flush()
@@ -54,7 +55,8 @@ func GetFile(path string) (*os.File, error) {
 	return file, nil
 }
 
-func fileExists(file string) bool {
+//FileExists Checks if file exists in specified path
+func FileExists(file string) bool {
 	info, err := os.Stat(file)
 	if os.IsNotExist(err) {
 		return false
