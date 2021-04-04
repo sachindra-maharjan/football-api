@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -95,15 +96,19 @@ func (s Switch) league() func(string) error {
 		fmt.Printf("fetched league data successfully. Total count:  %d \n", leagueResult.API.Results)
 
 		if dest != nil {
+			dir, _ := filepath.Split(*dest + "/")
+			filepath := dir + "/league.csv"
+
 			leagueData, err := s.client.LeagueService.GetFlatDataWithHeader(leagueResult)
 			if err != nil {
 				return nil
 			}
-			fmt.Printf("header %s", leagueData[0])
-			fmt.Printf("data %s", leagueData[1])
-			if err = csvutil.Write(*dest, leagueData); err != nil {
+
+			if err = csvutil.Write(filepath, leagueData); err != nil {
 				wrapError("unable to write result", err)
 			}
+
+			fmt.Printf("data written to file %s successfully\n", filepath)
 		}
 
 		return nil
@@ -118,10 +123,10 @@ func (s Switch) health() func(string) error {
 }
 
 func (s Switch) clientFlags(f *flag.FlagSet) (*string, *string) {
-	file, format := "", ""
+	filepath, format := "", ""
 	f.StringVar(&format, "format", "", "The file format to save data.")
-	f.StringVar(&file, "file", "", "The distination to save file.")
-	return &file, &format
+	f.StringVar(&filepath, "filepath", "", "The distination to save file.")
+	return &filepath, &format
 }
 
 func (s Switch) parseCmd(cmd *flag.FlagSet) error {

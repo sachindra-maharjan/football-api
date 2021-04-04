@@ -13,6 +13,7 @@ func TestCsvUtil_CreateDirectoryStructure(t *testing.T) {
 		t.Fatalf("TempDir returned error %v", err)
 	}
 	path += "/league.csv"
+	t.Log("filepath : " + path)
 	dir := filepath.Dir(path)
 	file, err := GetFile(path)
 	defer os.RemoveAll(dir)
@@ -26,5 +27,17 @@ func TestCsvUtil_CreateDirectoryStructure(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Read file returned error %v", err)
 	}
+
+}
+
+func TestCsvUtil_WriteData(t *testing.T) {
+	records := [][]string{
+		{"first_name", "last_name", "username"},
+		{"Rob", "Pike", "rob"},
+		{"Ken", "Thompson", "ken"},
+		{"Robert", "Griesemer", "gri"},
+	}
+
+	Write("~/test.csv", records)
 
 }
