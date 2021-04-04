@@ -63,34 +63,25 @@ func (l *LeagueService) ListAll(ctx context.Context, leagueID int) (*LeagueResul
 }
 
 //GetFlatDataWithHeader Returns flat data with header
-func (l *LeagueService) GetFlatDataWithHeader(leagueResult *LeagueResult) ([][]string, error) {
-	flatData := [][]string{}
-	rows, err := l.GetFlatData(leagueResult)
-	if err != nil {
-		return nil, err
-	}
-	flatData = append(flatData, getHead())
-	flatData = append(flatData, rows...)
-	return flatData, nil
-}
-
-//GetFlatData Returns flat data
-func (l *LeagueService) GetFlatData(leagueResult *LeagueResult) ([][]string, error) {
+func (l *LeagueService) Convert(leagueResult *LeagueResult, includeHead bool) ([][]string, error) {
 	if leagueResult == nil {
-		return nil, fmt.Errorf("LeagueResult is nil")
+		return nil, fmt.Errorf("invalid league result.")
 	}
 
 	rows := [][]string{}
+	if includeHead {
+		rows = append(rows)
+	}
 
 	for _, league := range leagueResult.API.Leagues {
-		str := getFlat(league)
-		rows = append(rows, str)
+		rows = append(rows, l.getData(league))
 	}
+
 	return rows, nil
 }
 
 //GetFlat Returns flat array from an object
-func getFlat(league League) []string {
+func (service *LeagueService) getData(league League) []string {
 	var row []string
 	row = append(row, strconv.Itoa(league.LeagueID))
 	row = append(row, league.Name)
@@ -116,7 +107,7 @@ func getFlat(league League) []string {
 }
 
 //GetHead Returns the array of head fields
-func getHead() []string {
+func (service *LeagueService) getHead() []string {
 	var row []string
 	row = append(row, "ID")
 	row = append(row, "Name")

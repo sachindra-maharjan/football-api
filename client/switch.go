@@ -97,11 +97,11 @@ func (s Switch) league() func(string) error {
 
 		if dest != nil {
 			dir, _ := filepath.Split(*dest + "/")
-			filepath := dir + "/league.csv"
+			filepath := dir + "league.csv"
 
-			leagueData, err := s.client.LeagueService.GetFlatDataWithHeader(leagueResult)
+			leagueData, err := s.client.LeagueService.Convert(leagueResult, true)
 			if err != nil {
-				return nil
+				wrapError("unable to write flat data", err)
 			}
 
 			if err = csvutil.Write(filepath, leagueData); err != nil {
