@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"strconv"
 )
 
 //TeamService gets team informtion from api call
@@ -11,8 +12,9 @@ type TeamService service
 //TeamResult contins the parsed result of api response of team
 type TeamResult struct {
 	API struct {
-		Results int    `json:"results,omitempty"`
-		Teams   []Team `json:"teams,omitempty"`
+		Results  int    `json:"results,omitempty"`
+		Teams    []Team `json:"teams,omitempty"`
+		LeagueID int    `json:"leagueID,omitempty"`
 	} `json:"api"`
 }
 
@@ -43,6 +45,60 @@ func (t *TeamService) ListTeamsByLeagueID(ctx context.Context, leagueID int) (*T
 	if err != nil {
 		return nil, nil, err
 	}
-
+	teamResult.API.LeagueID = leagueID
 	return teamResult, res, nil
+}
+
+//GetFlatDataWithHeader Returns flat data with header
+func (l *TeamService) Convert(teamResult *TeamResult, includeHead bool) ([][]string, error) {
+	if teamResult == nil {
+		return nil, fmt.Errorf("invalid team result.")
+	}
+
+	rows := [][]string{}
+	if includeHead {
+		rows = append(rows)
+	}
+
+	for _, team := range teamResult.API.Teams {
+		rows = append(rows, l.getData(team, teamResult.API.LeagueID))
+	}
+
+	return rows, nil
+}
+
+//GetHead Returns the array of head fields
+func (service *TeamService) getHead() []string {
+	var row []string
+	row = append(row, "LeagueID")
+	row = append(row, "TeamID")
+	row = append(row, "Name")
+	row = append(row, "Code")
+	row = append(row, "Country")
+	row = append(row, "IsNational")
+	row = append(row, "Founded")
+	row = append(row, "VenueName")
+	row = append(row, "VenueSurface")
+	row = append(row, "VenueAddress")
+	row = append(row, "VenueCity")
+	row = append(row, "VenueCapacity")
+	return row
+}
+
+//GetFlat Returns flat array from an object
+func (service *TeamService) getData(t Team, leagueID int) []string {
+	var row []string
+	row = append(row, strconv.Itoa(leagueID))
+	row = append(row, strconv.Itoa(t.TeamID))
+	row = append(row, t.Name)
+	row = append(row, t.Code)
+	row = append(row, t.Country)
+	row = append(row, strconv.FormatBool(t.IsNational))
+	row = append(row, strconv.Itoa(t.Founded))
+	row = append(row, t.VenueName)
+	row = append(row, t.VenueSurface)
+	row = append(row, t.VenueAddress)
+	row = append(row, t.VenueCity)
+	row = append(row, strconv.Itoa(t.VenueCapacity))
+	return row
 }

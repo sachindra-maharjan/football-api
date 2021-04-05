@@ -13,6 +13,7 @@ type PlayerStatResult struct {
 	API struct {
 		Results    int          `json:"results"`
 		PlayerStat []PlayerStat `json:"players"`
+		FixtureID  int          `json:"fixtureID,omitempty"`
 	} `json:"api"`
 }
 
@@ -90,6 +91,7 @@ func (p *PlayerStatService) GetPlayerStatByFixtureID(context context.Context, fi
 		return nil, nil, err
 	}
 
+	playerStatResult.API.FixtureID = fixtureID
 	return playerStatResult, response, nil
 
 }

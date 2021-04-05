@@ -31,6 +31,6 @@ func TestFixtureLineUp_GetLineUpForFixture(t *testing.T) {
 		t.Errorf("StandingService_GetLeagueStanding returned error. want %+v got %+v", 2, result.API.Results)
 	}
 
-	//fmt.Println(result.API.LineUp["Manchester United"])
+	fmt.Println(result.API.LineUp["Manchester United"])
 
 }

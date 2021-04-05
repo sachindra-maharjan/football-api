@@ -29,7 +29,7 @@ func getAllLeague(leagueID int) ([][]string, error) {
 		return nil, err
 	}
 
-	result, err := api.LeagueService.GetFlatDataWithHeader(leagueResult)
+	result, err := api.LeagueService.Convert(leagueResult, true)
 	if err != nil {
 		return nil, err
 	}

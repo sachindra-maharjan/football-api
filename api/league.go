@@ -70,7 +70,7 @@ func (l *LeagueService) Convert(leagueResult *LeagueResult, includeHead bool) ([
 
 	rows := [][]string{}
 	if includeHead {
-		rows = append(rows)
+		rows = append(rows, l.getHead())
 	}
 
 	for _, league := range leagueResult.API.Leagues {
@@ -109,7 +109,7 @@ func (service *LeagueService) getData(league League) []string {
 //GetHead Returns the array of head fields
 func (service *LeagueService) getHead() []string {
 	var row []string
-	row = append(row, "ID")
+	row = append(row, "LeagueID")
 	row = append(row, "Name")
 	row = append(row, "Type")
 	row = append(row, "CountryCode")

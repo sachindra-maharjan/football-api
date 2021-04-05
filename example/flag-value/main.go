@@ -41,5 +41,7 @@ func main() {
 	flag.Parse()
 	fmt.Println(ids)
 	fmt.Println(p)
+	allIds := strings.Split(ids[0], ",")
+	fmt.Println(allIds[len(allIds)-1])
 
 }

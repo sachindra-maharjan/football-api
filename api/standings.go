@@ -14,6 +14,7 @@ type StandingResult struct {
 	API struct {
 		Results   int           `json:"results,omitempty"`
 		Standings [][]Standings `json:"standings,omitempty"`
+		LeagueID  int           `json:"leagueId,omitempty"`
 	} `json:"api"`
 }
 
@@ -58,7 +59,7 @@ func (service *StandingService) GetLeagueStandings(ctx context.Context, leagueID
 	if err != nil {
 		return nil, nil, err
 	}
-
+	standingResult.API.LeagueID = leagueID
 	return standingResult, res, err
 }
 
@@ -69,13 +70,11 @@ func (service *StandingService) Convert(result *StandingResult, includeHead bool
 	}
 
 	var rows [][]string
-	for _, standings := range result.API.Standings {
-		if includeHead {
-			rows = append(rows, service.getHeader())
-		}
-		if len(standings) > 0 {
-			rows = append(rows, service.getData(standings[0]))
-		}
+	if includeHead {
+		rows = append(rows, service.getHeader())
+	}
+	for _, standings := range result.API.Standings[0] {
+		rows = append(rows, service.getData(standings, result.API.LeagueID))
 	}
 
 	return rows, nil
@@ -83,6 +82,7 @@ func (service *StandingService) Convert(result *StandingResult, includeHead bool
 
 func (service *StandingService) getHeader() []string {
 	var row []string
+	row = append(row, "LeagueID")
 	row = append(row, "Rank")
 	row = append(row, "TeamId")
 	row = append(row, "TeamName")
@@ -112,8 +112,9 @@ func (service *StandingService) getHeader() []string {
 	return row
 }
 
-func (service *StandingService) getData(s Standings) []string {
+func (service *StandingService) getData(s Standings, leagueID int) []string {
 	var row []string
+	row = append(row, strconv.Itoa(leagueID))
 	row = append(row, strconv.Itoa(s.Rank))
 	row = append(row, strconv.Itoa(s.TeamID))
 	row = append(row, s.TeamName)
@@ -121,6 +122,7 @@ func (service *StandingService) getData(s Standings) []string {
 	row = append(row, s.Group)
 	row = append(row, s.Status)
 	row = append(row, s.Form)
+	row = append(row, s.Description)
 	row = append(row, strconv.Itoa(s.AllStat.MatchsPlayed))
 	row = append(row, strconv.Itoa(s.AllStat.Win))
 	row = append(row, strconv.Itoa(s.AllStat.Draw))

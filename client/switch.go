@@ -36,8 +36,9 @@ func NewSwitch() Switch {
 	}
 
 	s.commands = map[string]func() func(string) error{
-		"league": s.league,
-		"health": s.health,
+		"league":    s.league,
+		"standings": s.standings,
+		"health":    s.health,
 	}
 
 	return s
@@ -71,7 +72,7 @@ func (s Switch) league() func(string) error {
 		ids := idsFlag{}
 		fetchCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
 		fetchCmd.Var(&ids, "id", "The id of league to fetch data.")
-		dest, _ := s.clientFlags(fetchCmd)
+		basepath, _ := s.clientFlags(fetchCmd)
 
 		if err := s.checkArgs(1); err != nil {
 			return err
@@ -81,7 +82,8 @@ func (s Switch) league() func(string) error {
 			return err
 		}
 
-		lastId := ids[len(ids)-1]
+		allIds := strings.Split(ids[0], ",")
+		lastId := ids[len(allIds)-1]
 		id, err := strconv.Atoi(lastId)
 
 		if err != nil {
@@ -95,24 +97,82 @@ func (s Switch) league() func(string) error {
 
 		fmt.Printf("fetched league data successfully. Total count:  %d \n", leagueResult.API.Results)
 
-		if dest != nil {
-			dir, _ := filepath.Split(*dest + "/")
-			filepath := dir + "league.csv"
-
+		if basepath != nil {
 			leagueData, err := s.client.LeagueService.Convert(leagueResult, true)
 			if err != nil {
-				wrapError("unable to write flat data", err)
+				wrapError("unable to get data", err)
 			}
-
-			if err = csvutil.Write(filepath, leagueData); err != nil {
-				wrapError("unable to write result", err)
-			}
-
-			fmt.Printf("data written to file %s successfully\n", filepath)
+			finalPath := s.getFileDestination(*basepath, "league.csv", true)
+			s.writeData(finalPath, leagueData)
 		}
 
 		return nil
 	}
+}
+
+func (s Switch) standings() func(string) error {
+	return func(cmd string) error {
+		ids := idsFlag{}
+		standingsCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		standingsCmd.Var(&ids, "id", "The id of league to fetch data.")
+		basepath, _ := s.clientFlags(standingsCmd)
+
+		if err := s.checkArgs(1); err != nil {
+			return err
+		}
+
+		if err := s.parseCmd(standingsCmd); err != nil {
+			return err
+		}
+
+		for _, id := range strings.Split(ids[0], ",") {
+			leagueId, err := strconv.Atoi(id)
+
+			if err != nil {
+				wrapError("unable to convert string to int", err)
+			}
+
+			standingResult, _, err := s.client.StandingService.GetLeagueStandings(context.Background(), leagueId)
+			if err != nil {
+				return wrapError("could not fetch data", err)
+			}
+
+			fmt.Printf("fetched standings data successfully. Total count:  %d \n", standingResult.API.Results)
+
+			if basepath != nil {
+				standingData, err := s.client.StandingService.Convert(standingResult, true)
+				if err != nil {
+					wrapError("unable to write flat data", err)
+				}
+				finalPath := s.getFileDestination(*basepath,
+					fmt.Sprintf("leagueID_%d/%s", leagueId, "standing.csv"),
+					true,
+				)
+				s.writeData(finalPath, standingData)
+			}
+		}
+
+		return nil
+	}
+}
+
+func (s Switch) getFileDestination(basepath, filename string, delIfExists bool) string {
+	dir, _ := filepath.Split(basepath + "/")
+	finalDest := fmt.Sprintf("%s%s", dir, filename)
+
+	if delIfExists && s.fileExists(finalDest) {
+		os.Remove(finalDest)
+	}
+	return finalDest
+
+}
+
+func (s Switch) writeData(filepath string, data [][]string) error {
+	if err := csvutil.Write(filepath, data); err != nil {
+		wrapError("unable to write result", err)
+	}
+	fmt.Printf("data written to file %s successfully\n", filepath)
+	return nil
 }
 
 func (s Switch) health() func(string) error {
@@ -123,10 +183,10 @@ func (s Switch) health() func(string) error {
 }
 
 func (s Switch) clientFlags(f *flag.FlagSet) (*string, *string) {
-	filepath, format := "", ""
+	basepath, format := "", ""
 	f.StringVar(&format, "format", "", "The file format to save data.")
-	f.StringVar(&filepath, "filepath", "", "The distination to save file.")
-	return &filepath, &format
+	f.StringVar(&basepath, "basepath", "", "The distination to save file.")
+	return &basepath, &format
 }
 
 func (s Switch) parseCmd(cmd *flag.FlagSet) error {
@@ -153,4 +213,12 @@ func (s Switch) checkArgs(minArgs int) error {
 		)
 	}
 	return nil
+}
+
+func (s Switch) fileExists(filename string) bool {
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return !info.IsDir()
 }
