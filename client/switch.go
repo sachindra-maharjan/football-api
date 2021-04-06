@@ -36,9 +36,15 @@ func NewSwitch() Switch {
 	}
 
 	s.commands = map[string]func() func(string) error{
-		"league":    s.league,
-		"standings": s.standings,
-		"health":    s.health,
+		"league":         s.league,
+		"standings":      s.standings,
+		"fixtures":       s.fixtures,
+		"fixture-event":  s.fixtureEvent,
+		"fixture-lineup": s.fixtureLineup,
+		"player-stat":    s.playerStat,
+		"top-scorer":     s.topScorer,
+		"team":           s.team,
+		"health":         s.health,
 	}
 
 	return s
@@ -71,7 +77,7 @@ func (s Switch) league() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
 		fetchCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-		fetchCmd.Var(&ids, "id", "The id of league to fetch data.")
+		fetchCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
 		basepath, _ := s.clientFlags(fetchCmd)
 
 		if err := s.checkArgs(1); err != nil {
@@ -114,7 +120,7 @@ func (s Switch) standings() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
 		standingsCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-		standingsCmd.Var(&ids, "id", "The id of league to fetch data.")
+		standingsCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
 		basepath, _ := s.clientFlags(standingsCmd)
 
 		if err := s.checkArgs(1); err != nil {
@@ -156,6 +162,164 @@ func (s Switch) standings() func(string) error {
 	}
 }
 
+func (s Switch) fixtures() func(string) error {
+	return func(cmd string) error {
+		ids := idsFlag{}
+		fixturesCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		fixturesCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
+		basepath, _ := s.clientFlags(fixturesCmd)
+
+		if err := s.checkArgs(1); err != nil {
+			return err
+		}
+
+		if err := s.parseCmd(fixturesCmd); err != nil {
+			return err
+		}
+
+		for _, id := range strings.Split(ids[0], ",") {
+			leagueId, err := strconv.Atoi(id)
+
+			if err != nil {
+				wrapError("unable to convert string to int", err)
+			}
+
+			fixtureResult, _, err := s.client.FixtureService.GetFixturesByLeagueID(context.Background(), leagueId)
+			if err != nil {
+				return wrapError("could not fetch data", err)
+			}
+
+			fmt.Printf("fetched fixture data successfully. Total count:  %d \n", fixtureResult.API.Results)
+
+			if basepath != nil {
+				fixtureData, err := s.client.FixtureService.Convert(fixtureResult, true)
+				if err != nil {
+					wrapError("unable to write flat data", err)
+				}
+				finalPath := s.getFileDestination(*basepath,
+					fmt.Sprintf("leagueID_%d/%s", leagueId, "fixtures.csv"),
+					true,
+				)
+				s.writeData(finalPath, fixtureData)
+			}
+		}
+
+		return nil
+	}
+}
+
+func (s Switch) team() func(string) error {
+	return func(cmd string) error {
+		ids := idsFlag{}
+		teamCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		teamCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
+		basepath, _ := s.clientFlags(teamCmd)
+
+		if err := s.checkArgs(1); err != nil {
+			return err
+		}
+
+		if err := s.parseCmd(teamCmd); err != nil {
+			return err
+		}
+
+		for _, id := range strings.Split(ids[0], ",") {
+			leagueId, err := strconv.Atoi(id)
+
+			if err != nil {
+				wrapError("unable to convert string to int", err)
+			}
+
+			teamResult, _, err := s.client.TeamService.ListTeamsByLeagueID(context.Background(), leagueId)
+			if err != nil {
+				return wrapError("could not fetch data", err)
+			}
+
+			fmt.Printf("fetched team data successfully. Total count:  %d \n", teamResult.API.Results)
+
+			if basepath != nil {
+				teamData, err := s.client.TeamService.Convert(teamResult, true)
+				if err != nil {
+					wrapError("unable to write flat data", err)
+				}
+				finalPath := s.getFileDestination(*basepath,
+					fmt.Sprintf("leagueID_%d/%s", leagueId, "team.csv"),
+					true,
+				)
+				s.writeData(finalPath, teamData)
+			}
+		}
+
+		return nil
+	}
+}
+
+func (s Switch) fixtureEvent() func(string) error {
+	return func(cmd string) error {
+		ids := idsFlag{}
+		fixtureEventCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		fixtureEventCmd.Var(&ids, "fixtureId", "The fixture id of league to fetch data.")
+		leagueId, basepath, _ := s.clientEventFlags(fixtureEventCmd)
+
+		if err := s.checkArgs(2); err != nil {
+			return err
+		}
+
+		if err := s.parseCmd(fixtureEventCmd); err != nil {
+			return err
+		}
+
+		for _, id := range strings.Split(ids[0], ",") {
+			fixtureId, err := strconv.Atoi(id)
+
+			if err != nil {
+				wrapError("unable to convert string to int", err)
+			}
+
+			fixtureEventResult, _, err := s.client.FixtureEventService.GetFixtureEvent(context.Background(), fixtureId)
+			if err != nil {
+				return wrapError("could not fetch data", err)
+			}
+
+			fmt.Printf("fetched fixture event data successfully. Total count:  %d \n", fixtureEventResult.API.Results)
+
+			if basepath != nil {
+				fixtureData, err := s.client.FixtureEventService.Convert(fixtureEventResult, true)
+				if err != nil {
+					wrapError("unable to write flat data", err)
+				}
+				finalPath := s.getFileDestination(*basepath,
+					fmt.Sprintf("leagueID_%s/%s", *leagueId, "fixture-event.csv"),
+					false,
+				)
+				s.writeData(finalPath, fixtureData)
+			}
+		}
+		return nil
+	}
+}
+
+func (s Switch) fixtureLineup() func(string) error {
+	return func(s string) error {
+		fmt.Println("Fixture Lineup event command")
+		return nil
+	}
+}
+
+func (s Switch) playerStat() func(string) error {
+	return func(s string) error {
+		fmt.Println("Player Stat event command")
+		return nil
+	}
+}
+
+func (s Switch) topScorer() func(string) error {
+	return func(s string) error {
+		fmt.Println("Top scorer event command")
+		return nil
+	}
+}
+
 func (s Switch) getFileDestination(basepath, filename string, delIfExists bool) string {
 	dir, _ := filepath.Split(basepath + "/")
 	finalDest := fmt.Sprintf("%s%s", dir, filename)
@@ -187,6 +351,13 @@ func (s Switch) clientFlags(f *flag.FlagSet) (*string, *string) {
 	f.StringVar(&format, "format", "", "The file format to save data.")
 	f.StringVar(&basepath, "basepath", "", "The distination to save file.")
 	return &basepath, &format
+}
+
+func (s Switch) clientEventFlags(f *flag.FlagSet) (*string, *string, *string) {
+	leagueId := ""
+	f.StringVar(&leagueId, "leagueId", "", "The id of the league.")
+	basepath, format := s.clientFlags(f)
+	return &leagueId, basepath, format
 }
 
 func (s Switch) parseCmd(cmd *flag.FlagSet) error {

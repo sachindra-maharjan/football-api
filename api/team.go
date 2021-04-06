@@ -57,7 +57,7 @@ func (l *TeamService) Convert(teamResult *TeamResult, includeHead bool) ([][]str
 
 	rows := [][]string{}
 	if includeHead {
-		rows = append(rows)
+		rows = append(rows, l.getHead())
 	}
 
 	for _, team := range teamResult.API.Teams {

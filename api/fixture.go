@@ -80,10 +80,12 @@ func (service *FixtureService) Convert(result *FixtureResult, includeHead bool) 
 	}
 
 	var rows [][]string
+
+	if includeHead {
+		rows = append(rows, service.getHeader())
+	}
+
 	for _, fixture := range result.API.Fixtures {
-		if includeHead {
-			rows = append(rows, service.getHeader())
-		}
 		rows = append(rows, service.getData(fixture))
 	}
 
@@ -93,6 +95,7 @@ func (service *FixtureService) Convert(result *FixtureResult, includeHead bool) 
 func (service *FixtureService) getHeader() []string {
 	var row []string
 	row = append(row, "LeagueID")
+	row = append(row, "FixtureID")
 	row = append(row, "League.Name")
 	row = append(row, "League.Country")
 	row = append(row, "League.Logo")
@@ -125,6 +128,7 @@ func (service *FixtureService) getHeader() []string {
 func (service *FixtureService) getData(f Fixture) []string {
 	var row []string
 	row = append(row, strconv.Itoa(f.LeagueID))
+	row = append(row, strconv.Itoa(f.FixtureID))
 	row = append(row, f.League.Name)
 	row = append(row, f.League.Country)
 	row = append(row, f.League.Logo)
@@ -145,6 +149,8 @@ func (service *FixtureService) getData(f Fixture) []string {
 	row = append(row, strconv.Itoa(f.AwayTeam.TeamID))
 	row = append(row, f.AwayTeam.TeamName)
 	row = append(row, f.AwayTeam.Logo)
+	row = append(row, strconv.Itoa(f.GoalsHomeTeam))
+	row = append(row, strconv.Itoa(f.GoalsAwayTeam))
 	row = append(row, f.Score.HalfTime)
 	row = append(row, f.Score.FullTime)
 	row = append(row, f.Score.ExtraTime)

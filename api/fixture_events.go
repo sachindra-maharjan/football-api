@@ -57,10 +57,12 @@ func (service *FixtureEventService) Convert(result *FixtureEventResult, includeH
 	}
 
 	var rows [][]string
+
+	if includeHead {
+		rows = append(rows, service.getHeader())
+	}
+
 	for _, event := range result.API.FixtureEvents {
-		if includeHead {
-			rows = append(rows, service.getHeader())
-		}
 		rows = append(rows, service.getData(event, result.API.FixtureID))
 	}
 
