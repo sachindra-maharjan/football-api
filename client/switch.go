@@ -300,8 +300,49 @@ func (s Switch) fixtureEvent() func(string) error {
 }
 
 func (s Switch) fixtureLineup() func(string) error {
-	return func(s string) error {
-		fmt.Println("Fixture Lineup event command")
+	return func(cmd string) error {
+		ids := idsFlag{}
+		fixtureEventCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		fixtureEventCmd.Var(&ids, "fixtureId", "The fixture id of league to fetch data.")
+		leagueId, basepath, _ := s.clientEventFlags(fixtureEventCmd)
+
+		if err := s.checkArgs(2); err != nil {
+			return err
+		}
+
+		if err := s.parseCmd(fixtureEventCmd); err != nil {
+			return err
+		}
+
+		for _, id := range strings.Split(ids[0], ",") {
+			fixtureId, err := strconv.Atoi(id)
+
+			if err != nil {
+				wrapError("unable to convert string to int", err)
+			}
+
+			fixtureLineUpResult, _, err := s.client.FixtureLineUpService.GetLineUpForFixture(context.Background(), fixtureId)
+			if err != nil {
+				return wrapError("could not fetch data", err)
+			}
+
+			fmt.Printf("fetched fixture linup data successfully. Total count:  %d \n", fixtureLineUpResult.API.Results)
+
+			if basepath != nil {
+				filepath := s.getFileDestination(*basepath,
+					fmt.Sprintf("leagueID_%s/%s", *leagueId, "fixture-lineup.csv"),
+					false,
+				)
+
+				lineup, err := s.client.FixtureLineUpService.Convert(fixtureLineUpResult,
+					!s.fileExists(filepath))
+
+				if err != nil {
+					wrapError("unable to write flat data", err)
+				}
+				s.writeData(filepath, lineup)
+			}
+		}
 		return nil
 	}
 }

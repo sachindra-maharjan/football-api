@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 //FixtureLineUpService gets the line ups of a fixture from api
@@ -62,54 +63,40 @@ func (l *FixtureLineUpService) GetLineUpForFixture(context context.Context, fixt
 }
 
 //GetFlatDataWithHeader Returns flat data with header
-func (f *FixtureLineUpService) Convert(result *FixtureLineUpResult, includeHead bool) ([][]string, [][]string, error) {
+func (f *FixtureLineUpService) Convert(result *FixtureLineUpResult, includeHead bool) ([][]string, error) {
 	if result == nil {
-		return nil, nil, fmt.Errorf("invalid league result.")
+		return nil, fmt.Errorf("invalid league result.")
 	}
 
-	formation := [][]string{}
 	startingXI := [][]string{}
+
 	if includeHead {
-		formation = append(formation, f.getFormationHead())
 		startingXI = append(startingXI, f.getStartingXIHead())
 	}
 
 	for _, fixtureTeam := range result.API.LineUp {
-		formation = append(formation, f.getFormationData(result.API.FixtureID, fixtureTeam))
 		startingXI = append(startingXI, f.getStartingXIData(result.API.FixtureID, fixtureTeam))
 	}
 
-	return formation, startingXI, nil
-}
-
-//getData Returns flat array from an object
-func (service *FixtureLineUpService) getFormationData(fixtureID int, team FixtureTeam) []string {
-	var row []string
-	row = append(row, strconv.Itoa(fixtureID))
-	row = append(row, strconv.Itoa(team.CoachID))
-	row = append(row, team.Coach)
-	row = append(row, team.Formation)
-	return row
+	return startingXI, nil
 }
 
 //getStartingXIData Returns flat array from an object
 func (service *FixtureLineUpService) getStartingXIData(fixtureID int, team FixtureTeam) []string {
 	var row []string
+	var playerXI string
 	row = append(row, strconv.Itoa(fixtureID))
+	row = append(row, strconv.Itoa(team.CoachID))
+	row = append(row, team.Coach)
+	row = append(row, team.Formation)
 
-	for _, player := range team.StartingXI {
-		row = append(row, fmt.Sprintf("%d|%d%s|%d|%s", player.TeamID, player.PlayerID, player.PlayerName, player.Number, player.Position))
+	for i, player := range team.StartingXI {
+		if i == 0 {
+			row = append(row, strconv.Itoa(player.TeamID))
+		}
+		playerXI = playerXI + fmt.Sprintf("%d|%s|%d|%s-", player.PlayerID, player.PlayerName, player.Number, player.Position)
 	}
-	return row
-}
-
-//getFormationHead Returns the array of head fields
-func (service *FixtureLineUpService) getFormationHead() []string {
-	var row []string
-	row = append(row, "FixtureID")
-	row = append(row, "CoachID")
-	row = append(row, "CoachName")
-	row = append(row, "Formation")
+	row = append(row, strings.TrimRight(playerXI, "-"))
 	return row
 }
 
@@ -117,6 +104,10 @@ func (service *FixtureLineUpService) getFormationHead() []string {
 func (service *FixtureLineUpService) getStartingXIHead() []string {
 	var row []string
 	row = append(row, "FixtureID")
-	row = append(row, "TeamID|PlayerID|Payer|Number|Pos")
+	row = append(row, "CoachID")
+	row = append(row, "CoachName")
+	row = append(row, "Formation")
+	row = append(row, "TeamID")
+	row = append(row, "PlayerID|Payer|Number|Pos-PlayerID|Payer|Number|Pos")
 	return row
 }
