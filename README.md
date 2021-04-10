@@ -6,7 +6,9 @@ This is a CLI application to fetch football api data from football-api hosted in
 
 ### Build
 
-`script make football-api `
+```script
+ make football-api
+```
 
 ### Available Commands
 
