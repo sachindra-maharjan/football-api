@@ -1,29 +1,20 @@
-# README
+# Football-API CLI
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This is a CLI application to fetch football api data from rapidapi.
 
-### What is this repository for?
+### RapidAPI - Football Api
 
-- Quick summary
-- Version
-- [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### Build
 
-### How do I get set up?
+`make football-api`
 
-- Summary of set up
-- Configuration
-- Dependencies
-- Database configuration
-- How to run tests
-- Deployment instructions
+### Available Commands
 
-### Contribution guidelines
-
-- Writing tests
-- Code review
-- Other guidelines
-
-### Who do I talk to?
-
-- Repo owner or admin
-- Other community or team contact
+- league
+- standings
+- team
+- fixtures
+- fixture-event
+- fixture-lineup
+- player-stat
+- top-scorer

@@ -13,16 +13,11 @@ import (
 )
 
 var (
-	apiKeys = []string{
-		"U4y3LniAIdmsh1SryySGibO7k8ELp1syFPvjsnpHOQNWAvpJAk",
-		"fb43974268msh3572919d41d6618p13d954jsn33a929b62a3e",
-		"c51e5b8904mshceec0852f5862a4p177382jsn7eda4122238b",
-		"d449529368msh69f30acee47f6f0p1c4735jsn009552b076ae",
-		"fc4476d75amsh2e54b90d81a1dd8p14c6cejsn82aed8cbba4d",
-	}
+	apiKeys = []string{}
 )
 
 type idsFlag []string
+type authKeysFlag []string
 
 func (list idsFlag) String() string {
 	return strings.Join(list, ",")
@@ -30,6 +25,15 @@ func (list idsFlag) String() string {
 
 func (list *idsFlag) Set(id string) error {
 	*list = append(*list, id)
+	return nil
+}
+
+func (list authKeysFlag) String() string {
+	return strings.Join(list, ",")
+}
+
+func (list *authKeysFlag) Set(authKey string) error {
+	*list = append(*list, authKey)
 	return nil
 }
 
@@ -86,17 +90,21 @@ func (s Switch) Help() {
 func (s Switch) league() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
+		authKeys := authKeysFlag{}
 		fetchCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		fetchCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		fetchCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
 		basepath, _ := s.clientFlags(fetchCmd)
 
-		if err := s.checkArgs(1); err != nil {
+		if err := s.checkArgs(3); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(fetchCmd); err != nil {
 			return err
 		}
+
+		apiKeys = strings.Split(authKeys[0], ",")
 
 		allIds := strings.Split(ids[0], ",")
 		lastId := ids[len(allIds)-1]
@@ -129,17 +137,21 @@ func (s Switch) league() func(string) error {
 func (s Switch) standings() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
+		authKeys := authKeysFlag{}
 		standingsCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		standingsCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		standingsCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
 		basepath, _ := s.clientFlags(standingsCmd)
 
-		if err := s.checkArgs(1); err != nil {
+		if err := s.checkArgs(3); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(standingsCmd); err != nil {
 			return err
 		}
+
+		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			leagueId, err := strconv.Atoi(id)
@@ -175,7 +187,10 @@ func (s Switch) standings() func(string) error {
 func (s Switch) fixtures() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
+		authKeys := authKeysFlag{}
+
 		fixturesCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		fixturesCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		fixturesCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
 		basepath, _ := s.clientFlags(fixturesCmd)
 
@@ -186,6 +201,8 @@ func (s Switch) fixtures() func(string) error {
 		if err := s.parseCmd(fixturesCmd); err != nil {
 			return err
 		}
+
+		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			leagueId, err := strconv.Atoi(id)
@@ -221,17 +238,21 @@ func (s Switch) fixtures() func(string) error {
 func (s Switch) team() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
+		authKeys := authKeysFlag{}
 		teamCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		teamCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		teamCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
 		basepath, _ := s.clientFlags(teamCmd)
 
-		if err := s.checkArgs(1); err != nil {
+		if err := s.checkArgs(3); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(teamCmd); err != nil {
 			return err
 		}
+
+		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			leagueId, err := strconv.Atoi(id)
@@ -267,17 +288,21 @@ func (s Switch) team() func(string) error {
 func (s Switch) fixtureEvent() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
+		authKeys := authKeysFlag{}
 		fixtureEventCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		fixtureEventCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		fixtureEventCmd.Var(&ids, "fixtureId", "The fixture id of league to fetch data.")
 		leagueId, basepath, _ := s.clientEventFlags(fixtureEventCmd)
 
-		if err := s.checkArgs(2); err != nil {
+		if err := s.checkArgs(3); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(fixtureEventCmd); err != nil {
 			return err
 		}
+
+		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			fixtureId, err := strconv.Atoi(id)
@@ -312,17 +337,21 @@ func (s Switch) fixtureEvent() func(string) error {
 func (s Switch) fixtureLineup() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
+		authKeys := authKeysFlag{}
 		fixtureEventCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		fixtureEventCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		fixtureEventCmd.Var(&ids, "fixtureId", "The fixture id of league to fetch data.")
 		leagueId, basepath, _ := s.clientEventFlags(fixtureEventCmd)
 
-		if err := s.checkArgs(2); err != nil {
+		if err := s.checkArgs(3); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(fixtureEventCmd); err != nil {
 			return err
 		}
+
+		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			fixtureId, err := strconv.Atoi(id)
@@ -360,17 +389,21 @@ func (s Switch) fixtureLineup() func(string) error {
 func (s Switch) playerStat() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
+		authKeys := authKeysFlag{}
 		playerStatCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		playerStatCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		playerStatCmd.Var(&ids, "fixtureId", "The fixture id of league to fetch data.")
 		leagueId, basepath, _ := s.clientEventFlags(playerStatCmd)
 
-		if err := s.checkArgs(2); err != nil {
+		if err := s.checkArgs(3); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(playerStatCmd); err != nil {
 			return err
 		}
+
+		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			fixtureId, err := strconv.Atoi(id)
@@ -408,17 +441,21 @@ func (s Switch) playerStat() func(string) error {
 func (s Switch) topScorer() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
+		authKeys := authKeysFlag{}
 		topScorerCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		topScorerCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		topScorerCmd.Var(&ids, "leagueId", "The fixture id of league to fetch data.")
 		basepath, _ := s.clientFlags(topScorerCmd)
 
-		if err := s.checkArgs(2); err != nil {
+		if err := s.checkArgs(3); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(topScorerCmd); err != nil {
 			return err
 		}
+
+		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			leagueId, err := strconv.Atoi(id)
