@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	client := api.NewClient(nil)
+	client := api.NewClient(nil, []string{})
 
 	standingResult, _, err := client.StandingService.GetLeagueStandings(context.Background(), 2)
 

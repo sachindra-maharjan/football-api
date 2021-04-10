@@ -30,13 +30,15 @@ const (
 )
 
 var (
-	apiKeys = map[string]string{
-		"key1": "U4y3LniAIdmsh1SryySGibO7k8ELp1syFPvjsnpHOQNWAvpJAk",
-		"key2": "fb43974268msh3572919d41d6618p13d954jsn33a929b62a3e",
-		"key3": "c51e5b8904mshceec0852f5862a4p177382jsn7eda4122238b",
-		"key4": "d449529368msh69f30acee47f6f0p1c4735jsn009552b076ae",
-		"key5": "fc4476d75amsh2e54b90d81a1dd8p14c6cejsn82aed8cbba4d",
+	apiAuthKeys = []string{}
+
+	rate = Rate{
+		Limit: 100, Remaining: 100,
 	}
+
+	keyMap map[string]Rate
+
+	keyIndex = 0
 )
 
 //Client manages communication to REST API
@@ -48,9 +50,9 @@ type Client struct {
 	//BaseURL should always be specified with a trailing slash
 	BaseURL *url.URL
 
+	authKeys  []string
 	UserAgent string
 
-	authKey   string
 	rateMu    sync.Mutex
 	rateLimit Rate
 
@@ -194,14 +196,23 @@ func (r *ErrorResponse) Error() string {
 }
 
 //NewClient returns a new clien to consume rest services
-func NewClient(httpClient *http.Client) *Client {
+func NewClient(httpClient *http.Client, authkeys []string) *Client {
 	if httpClient == nil {
 		httpClient = &http.Client{}
 	}
 
 	baseURL, _ := url.Parse(defaultBaseURL)
 
-	c := &Client{client: httpClient, BaseURL: baseURL, authKey: rapidAPIKey}
+	keyMap = make(map[string]Rate)
+
+	if authkeys != nil {
+		apiAuthKeys = authkeys
+		for _, key := range authkeys {
+			keyMap[key] = rate
+		}
+	}
+
+	c := &Client{client: httpClient, BaseURL: baseURL}
 	c.common.client = c
 	c.LeagueService = (*LeagueService)(&c.common)
 	c.TeamService = (*TeamService)(&c.common)
@@ -241,6 +252,12 @@ func (c *Client) NewRequest(method, url string, body interface{}) (*http.Request
 		}
 	}
 
+	authKey, err := NewAuthKey()
+
+	if err != nil {
+		return nil, err
+	}
+
 	req, err := http.NewRequest(method, u.String(), buf)
 
 	if err != nil {
@@ -252,7 +269,7 @@ func (c *Client) NewRequest(method, url string, body interface{}) (*http.Request
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("x-rapidapi-host", rapidAPIHost)
-	req.Header.Set("x-rapidapi-key", c.authKey)
+	req.Header.Set("x-rapidapi-key", authKey)
 
 	if c.UserAgent != "" {
 		req.Header.Set("User-Agent", c.UserAgent)
@@ -266,14 +283,23 @@ func (c *Client) NewRequest(method, url string, body interface{}) (*http.Request
 // r must not be nil
 func newResponse(r *http.Response) *Response {
 	response := &Response{Response: r}
-
-	rateLimit, _ := strconv.Atoi(r.Header.Get(headerRateLimit))
-	rateRemaining, _ := strconv.Atoi(r.Header.Get(headerRateRemaining))
-
-	response.Rate.Limit = rateLimit
-	response.Rate.Remaining = rateRemaining
-
 	return response
+}
+
+func NewAuthKey() (string, error) {
+	key := keyMap[apiAuthKeys[keyIndex]]
+	if key.Remaining <= 0 {
+		fmt.Printf("Key %d exausted. Limit:%d Remaining:%d \n", keyIndex+1, key.Limit, key.Remaining)
+		keyIndex += 1
+	}
+
+	if keyIndex > len(apiAuthKeys) {
+		return "", fmt.Errorf("No api keys available.")
+	}
+
+	fmt.Printf("Using key %d. Limit:%d Remaining:%d \n", keyIndex+1, key.Limit, key.Remaining)
+
+	return apiAuthKeys[keyIndex], nil
 }
 
 //Do sends an API request and returns the response. The API response is JSON decodeded
@@ -282,8 +308,6 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Res
 		return nil, errors.New("context must not be nil")
 	}
 	req = req.WithContext(ctx)
-
-	//calculate rate limits
 
 	resp, err := c.client.Do(req)
 
@@ -313,9 +337,9 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Res
 	response := newResponse(resp)
 
 	//user response to check rate
-	//c.rateMu.Lock()
-	//accumulate rate
-	//c.rateMu.Unlock()
+	c.rateMu.Lock()
+	AccumulateRate(response)
+	c.rateMu.Unlock()
 
 	err = CheckResponse(resp)
 	if err != nil {
@@ -407,4 +431,22 @@ func CheckResponse(r *http.Response) error {
 		return errorResponse
 	}
 
+}
+
+//Assigns the remaining rate for current key
+func AccumulateRate(r *Response) {
+	rateLimit, _ := strconv.Atoi(r.Header.Get(headerRateLimit))
+	rateRemaining, _ := strconv.Atoi(r.Header.Get(headerRateRemaining))
+
+	r.Rate = Rate{
+		Limit: rateLimit, Remaining: rateRemaining,
+	}
+
+	if rate, found := keyMap[apiAuthKeys[keyIndex]]; found {
+		rate.Limit = rateLimit
+		rate.Remaining = rateRemaining
+		keyMap[apiAuthKeys[keyIndex]] = rate
+	}
+
+	fmt.Printf("Rate - Limit:%d Remaining:%d\n", rateLimit, rateRemaining)
 }

@@ -11,6 +11,16 @@ import (
 	"testing"
 )
 
+var (
+	apiKeys = []string{
+		"key1",
+		"key2",
+		"key3",
+		"key4",
+		"key5",
+	}
+)
+
 const (
 	// baseURLPath is a non-empty Client.BaseURL path to use during tests,
 	// to ensure relative URLs are used for all endpoints. See issue #752.
@@ -44,7 +54,7 @@ func setup() (client *Client, mux *http.ServeMux, serverURL string, teardown fun
 
 	// client is the GitHub client being tested and is
 	// configured to use test server.
-	client = NewClient(nil)
+	client = NewClient(nil, apiKeys)
 	url, _ := url.Parse(server.URL + baseURLPath + "/")
 	client.BaseURL = url
 
@@ -98,5 +108,12 @@ func testBody(t *testing.T, r *http.Request, want string) {
 	}
 	if got := string(b); got != want {
 		t.Errorf("request Body is %s, want %s", got, want)
+	}
+}
+
+func testAuthKey(t *testing.T, r *http.Request, keyIndex int, key string) {
+	t.Helper()
+	if apiAuthKeys[keyIndex] != key {
+		t.Errorf("Auth Key usage error, want %+v got %+v ", apiAuthKeys[keyIndex], key)
 	}
 }

@@ -22,7 +22,7 @@ func main() {
 }
 
 func getAllLeague(leagueID int) ([][]string, error) {
-	api := api.NewClient(nil)
+	api := api.NewClient(nil, []string{})
 	leagueResult, _, err := api.LeagueService.ListAll(context.Background(), 2)
 
 	if err != nil {

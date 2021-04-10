@@ -12,6 +12,16 @@ import (
 	"strings"
 )
 
+var (
+	apiKeys = []string{
+		"U4y3LniAIdmsh1SryySGibO7k8ELp1syFPvjsnpHOQNWAvpJAk",
+		"fb43974268msh3572919d41d6618p13d954jsn33a929b62a3e",
+		"c51e5b8904mshceec0852f5862a4p177382jsn7eda4122238b",
+		"d449529368msh69f30acee47f6f0p1c4735jsn009552b076ae",
+		"fc4476d75amsh2e54b90d81a1dd8p14c6cejsn82aed8cbba4d",
+	}
+)
+
 type idsFlag []string
 
 func (list idsFlag) String() string {
@@ -29,7 +39,7 @@ type ApiClient interface {
 }
 
 func NewSwitch() Switch {
-	httpClient := api.NewClient(nil)
+	httpClient := api.NewClient(nil, apiKeys)
 
 	s := Switch{
 		client: httpClient,
