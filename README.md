@@ -1,12 +1,12 @@
 # Football-API CLI
 
-This is a CLI application to fetch football api data from rapidapi.
+This is a CLI application to fetch football api data from football-api hosted in Rapid-Api.
 
-### RapidAPI - Football Api
+### RapidAPI - Football API Url
 
 ### Build
 
-`make football-api`
+`script make football-api `
 
 ### Available Commands
 
@@ -18,3 +18,24 @@ This is a CLI application to fetch football api data from rapidapi.
 - fixture-lineup
 - player-stat
 - top-scorer
+- help
+
+## Commands
+
+### Help
+
+### League
+
+### Standings
+
+### Team
+
+### Fixtures
+
+### Fixture-Event
+
+### Fixture-Lineup
+
+### Player-Stat
+
+### Top-Scorer
