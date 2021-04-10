@@ -348,15 +348,96 @@ func (s Switch) fixtureLineup() func(string) error {
 }
 
 func (s Switch) playerStat() func(string) error {
-	return func(s string) error {
-		fmt.Println("Player Stat event command")
+	return func(cmd string) error {
+		ids := idsFlag{}
+		playerStatCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		playerStatCmd.Var(&ids, "fixtureId", "The fixture id of league to fetch data.")
+		leagueId, basepath, _ := s.clientEventFlags(playerStatCmd)
+
+		if err := s.checkArgs(2); err != nil {
+			return err
+		}
+
+		if err := s.parseCmd(playerStatCmd); err != nil {
+			return err
+		}
+
+		for _, id := range strings.Split(ids[0], ",") {
+			fixtureId, err := strconv.Atoi(id)
+
+			if err != nil {
+				wrapError("unable to convert string to int", err)
+			}
+
+			playerStatResult, _, err := s.client.PlayerStatService.GetPlayerStatByFixtureID(context.Background(), fixtureId)
+			if err != nil {
+				return wrapError("could not fetch data", err)
+			}
+
+			fmt.Printf("fetched fixture linup data successfully. Total count:  %d \n", playerStatResult.API.Results)
+
+			if basepath != nil {
+				filepath := s.getFileDestination(*basepath,
+					fmt.Sprintf("leagueID_%s/%s", *leagueId, "player-fixture-stat.csv"),
+					false,
+				)
+
+				lineup, err := s.client.PlayerStatService.Convert(playerStatResult,
+					!s.fileExists(filepath))
+
+				if err != nil {
+					wrapError("unable to write flat data", err)
+				}
+				s.writeData(filepath, lineup)
+			}
+		}
 		return nil
 	}
 }
 
 func (s Switch) topScorer() func(string) error {
-	return func(s string) error {
-		fmt.Println("Top scorer event command")
+	return func(cmd string) error {
+		ids := idsFlag{}
+		topScorerCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
+		topScorerCmd.Var(&ids, "leagueId", "The fixture id of league to fetch data.")
+		basepath, _ := s.clientFlags(topScorerCmd)
+
+		if err := s.checkArgs(2); err != nil {
+			return err
+		}
+
+		if err := s.parseCmd(topScorerCmd); err != nil {
+			return err
+		}
+
+		for _, id := range strings.Split(ids[0], ",") {
+			leagueId, err := strconv.Atoi(id)
+
+			if err != nil {
+				wrapError("unable to convert string to int", err)
+			}
+
+			topScorerResult, _, err := s.client.TopScorerService.List(context.Background(), leagueId)
+			if err != nil {
+				return wrapError("could not fetch data", err)
+			}
+
+			fmt.Printf("fetched top scorer data successfully. Total count:  %d \n", topScorerResult.API.Results)
+
+			if basepath != nil {
+				filepath := s.getFileDestination(*basepath,
+					fmt.Sprintf("leagueID_%d/%s", leagueId, "topScorer.csv"),
+					true,
+				)
+
+				topScorer, err := s.client.TopScorerService.Convert(topScorerResult, true)
+
+				if err != nil {
+					wrapError("unable to write flat data", err)
+				}
+				s.writeData(filepath, topScorer)
+			}
+		}
 		return nil
 	}
 }
