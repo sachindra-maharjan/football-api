@@ -27,7 +27,7 @@ This is a CLI application to fetch football api data from football-api hosted in
 All the commands require environment variable RAPID_API_KEYS. This variable can be single key or a list of comma separated keys.
 
 ```script
-export $RAPID_API_KEYS=key1,key2,key3
+export RAPID_API_KEYS=key1,key2,key3
 ```
 
 ## Commands
