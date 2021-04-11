@@ -1,4 +1,4 @@
-package csvutil
+package fileutil
 
 import (
 	"encoding/csv"
@@ -23,6 +23,25 @@ func Write(file string, data [][]string) error {
 			log.Fatal("writing to file returned error", err)
 			return err
 		}
+	}
+	w.Flush()
+
+	return nil
+}
+
+//Write creates if not exists or appends to an existing file
+//writes data in the file
+func WriteToFile(file string, data []string) error {
+	newFile, err := GetFile(file)
+	if err != nil {
+		return err
+	}
+	defer newFile.Close()
+
+	w := csv.NewWriter(newFile)
+	if err := w.Write(data); err != nil {
+		log.Fatal("writing to file returned error", err)
+		return err
 	}
 	w.Flush()
 

@@ -1,4 +1,4 @@
-package csvutil
+package fileutil
 
 import (
 	"io/ioutil"

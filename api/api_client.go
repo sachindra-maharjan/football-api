@@ -288,12 +288,12 @@ func newResponse(r *http.Response) *Response {
 
 func NewAuthKey() (string, error) {
 	key := keyMap[apiAuthKeys[keyIndex]]
-	if key.Remaining <= 0 {
+	if key.Remaining <= 1 {
 		fmt.Printf("Key %d exausted. Limit:%d Remaining:%d \n", keyIndex+1, key.Limit, key.Remaining)
 		keyIndex += 1
 	}
 
-	if keyIndex > len(apiAuthKeys) {
+	if keyIndex+1 > len(apiAuthKeys) {
 		return "", fmt.Errorf("No api keys available.")
 	}
 
@@ -447,6 +447,4 @@ func AccumulateRate(r *Response) {
 		rate.Remaining = rateRemaining
 		keyMap[apiAuthKeys[keyIndex]] = rate
 	}
-
-	fmt.Printf("Rate - Limit:%d Remaining:%d\n", rateLimit, rateRemaining)
 }

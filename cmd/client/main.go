@@ -14,16 +14,21 @@ var (
 
 func main() {
 	flag.Parse()
-	s := client.NewSwitch()
+	s, err := client.NewSwitch()
+
+	if err != nil {
+		fmt.Printf("Cmd switch error: %s \n", err)
+		os.Exit(2)
+	}
 
 	if *helpFlag || len(os.Args) == 1 {
 		s.Help()
 		return
 	}
 
-	err := s.Switch()
+	err = s.Switch()
 	if err != nil {
-		fmt.Printf("cmd switch error: %s", err)
+		fmt.Printf("Cmd switch error: %s \n", err)
 		os.Exit(2)
 	}
 

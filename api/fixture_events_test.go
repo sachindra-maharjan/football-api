@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"testing"
+	"time"
 )
 
 func TestFixtureEvent_GetFixtureEvents(t *testing.T) {
@@ -45,8 +46,9 @@ func TestFixtureEvent_GetAllFixtureEventsWithRateLimits(t *testing.T) {
 		t.Fatalf("Json file could not be read. Error: %v", err)
 	}
 	limit := 100
-	remaining := 100
+	remaining := 2
 	index := 0
+	maxReqPerMin := 30
 
 	mux.HandleFunc("/events/", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
@@ -57,12 +59,40 @@ func TestFixtureEvent_GetAllFixtureEventsWithRateLimits(t *testing.T) {
 		fmt.Fprint(w, string(data))
 	})
 
-	for i := 0; i < 501; i++ {
+	requestCount := 0
+	var startTime time.Time
+	waitFlag := true
+	for i := 0; i < 380; i++ {
+		if waitFlag {
+			startTime = time.Now()
+		}
+
+		requestCount++
+		waitFlag = wait(startTime, requestCount, maxReqPerMin)
+		if waitFlag {
+			requestCount = 0
+		}
 		_, _, err = client.FixtureEventService.GetFixtureEvent(context.Background(), 65)
-		remaining--
-		if remaining < 0 {
-			remaining = 100
-			index++
+
+		if err == nil {
+			remaining--
+			if remaining < 0 {
+				remaining = 100
+				index++
+			}
 		}
 	}
+}
+
+func wait(startTime time.Time, reqCount int, maxReqPerMin int) bool {
+	waitFlag := false
+	if reqCount == maxReqPerMin {
+		elapsed := time.Now().Sub(startTime)
+		if elapsed.Milliseconds() <= 60*1000 {
+			fmt.Printf("Request limit per minute exceeded.Waiting for %d s before new request.\n", 61)
+			time.Sleep(time.Duration(61) * time.Second)
+			waitFlag = true
+		}
+	}
+	return waitFlag
 }

@@ -2,7 +2,7 @@ package client
 
 import (
 	"casino_royal/vault/api"
-	csvutil "casino_royal/vault/util"
+	fileutil "casino_royal/vault/util"
 	"context"
 	"flag"
 	"fmt"
@@ -10,14 +10,17 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var (
-	apiKeys = []string{}
+	apiKeys         = []string{}
+	requestCount    = 0
+	maxReqPerMinute = 28
+	startTime       time.Time
 )
 
 type idsFlag []string
-type authKeysFlag []string
 
 func (list idsFlag) String() string {
 	return strings.Join(list, ",")
@@ -28,21 +31,19 @@ func (list *idsFlag) Set(id string) error {
 	return nil
 }
 
-func (list authKeysFlag) String() string {
-	return strings.Join(list, ",")
-}
-
-func (list *authKeysFlag) Set(authKey string) error {
-	*list = append(*list, authKey)
-	return nil
-}
-
 type ApiClient interface {
 	League(leagueId int) (*api.LeagueResult, error)
 	Healthy(host string) bool
 }
 
-func NewSwitch() Switch {
+func NewSwitch() (Switch, error) {
+	keys := os.Getenv("RAPID_API_KEYS")
+	if len(keys) == 0 {
+		return Switch{}, fmt.Errorf("Environment variable 'RAPID_API_KEY' not found.")
+	}
+
+	apiKeys = strings.Split(keys, ",")
+
 	httpClient := api.NewClient(nil, apiKeys)
 
 	s := Switch{
@@ -58,10 +59,9 @@ func NewSwitch() Switch {
 		"player-stat":    s.playerStat,
 		"top-scorer":     s.topScorer,
 		"team":           s.team,
-		"health":         s.health,
 	}
 
-	return s
+	return s, nil
 }
 
 type Switch struct {
@@ -90,21 +90,17 @@ func (s Switch) Help() {
 func (s Switch) league() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
-		authKeys := authKeysFlag{}
 		fetchCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-		fetchCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		fetchCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
 		basepath, _ := s.clientFlags(fetchCmd)
 
-		if err := s.checkArgs(3); err != nil {
+		if err := s.checkArgs(2); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(fetchCmd); err != nil {
 			return err
 		}
-
-		apiKeys = strings.Split(authKeys[0], ",")
 
 		allIds := strings.Split(ids[0], ",")
 		lastId := ids[len(allIds)-1]
@@ -137,21 +133,17 @@ func (s Switch) league() func(string) error {
 func (s Switch) standings() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
-		authKeys := authKeysFlag{}
 		standingsCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-		standingsCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		standingsCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
 		basepath, _ := s.clientFlags(standingsCmd)
 
-		if err := s.checkArgs(3); err != nil {
+		if err := s.checkArgs(2); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(standingsCmd); err != nil {
 			return err
 		}
-
-		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			leagueId, err := strconv.Atoi(id)
@@ -187,22 +179,17 @@ func (s Switch) standings() func(string) error {
 func (s Switch) fixtures() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
-		authKeys := authKeysFlag{}
-
 		fixturesCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-		fixturesCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		fixturesCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
 		basepath, _ := s.clientFlags(fixturesCmd)
 
-		if err := s.checkArgs(1); err != nil {
+		if err := s.checkArgs(2); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(fixturesCmd); err != nil {
 			return err
 		}
-
-		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			leagueId, err := strconv.Atoi(id)
@@ -228,6 +215,16 @@ func (s Switch) fixtures() func(string) error {
 					true,
 				)
 				s.writeData(finalPath, fixtureData)
+
+				fixtureIdFile := s.getFileDestination(*basepath,
+					fmt.Sprintf("leagueID_%d/%s", leagueId, "fixtureid.csv"),
+					true,
+				)
+				fixtureIds := []string{}
+				for _, fixture := range fixtureResult.API.Fixtures {
+					fixtureIds = append(fixtureIds, strconv.Itoa(fixture.FixtureID))
+				}
+				s.write(fixtureIdFile, fixtureIds)
 			}
 		}
 
@@ -238,21 +235,17 @@ func (s Switch) fixtures() func(string) error {
 func (s Switch) team() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
-		authKeys := authKeysFlag{}
 		teamCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-		teamCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		teamCmd.Var(&ids, "leagueId", "The league id of league to fetch data.")
 		basepath, _ := s.clientFlags(teamCmd)
 
-		if err := s.checkArgs(3); err != nil {
+		if err := s.checkArgs(2); err != nil {
 			return err
 		}
 
 		if err := s.parseCmd(teamCmd); err != nil {
 			return err
 		}
-
-		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			leagueId, err := strconv.Atoi(id)
@@ -288,13 +281,11 @@ func (s Switch) team() func(string) error {
 func (s Switch) fixtureEvent() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
-		authKeys := authKeysFlag{}
 		fixtureEventCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-		fixtureEventCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		fixtureEventCmd.Var(&ids, "fixtureId", "The fixture id of league to fetch data.")
 		leagueId, basepath, _ := s.clientEventFlags(fixtureEventCmd)
 
-		if err := s.checkArgs(3); err != nil {
+		if err := s.checkArgs(2); err != nil {
 			return err
 		}
 
@@ -302,8 +293,8 @@ func (s Switch) fixtureEvent() func(string) error {
 			return err
 		}
 
-		apiKeys = strings.Split(authKeys[0], ",")
-
+		waitFlag := true
+		requestCount = 0
 		for _, id := range strings.Split(ids[0], ",") {
 			fixtureId, err := strconv.Atoi(id)
 
@@ -311,7 +302,20 @@ func (s Switch) fixtureEvent() func(string) error {
 				wrapError("unable to convert string to int", err)
 			}
 
+			if waitFlag {
+				startTime = time.Now()
+			}
+
+			requestCount++
+			waitFlag = s.wait(startTime, requestCount)
+
+			//Reset request count after wait
+			if waitFlag {
+				requestCount = 0
+			}
+
 			fixtureEventResult, _, err := s.client.FixtureEventService.GetFixtureEvent(context.Background(), fixtureId)
+
 			if err != nil {
 				return wrapError("could not fetch data", err)
 			}
@@ -319,14 +323,15 @@ func (s Switch) fixtureEvent() func(string) error {
 			fmt.Printf("fetched fixture event data successfully. Total count:  %d \n", fixtureEventResult.API.Results)
 
 			if basepath != nil {
-				fixtureData, err := s.client.FixtureEventService.Convert(fixtureEventResult, true)
-				if err != nil {
-					wrapError("unable to write flat data", err)
-				}
 				finalPath := s.getFileDestination(*basepath,
 					fmt.Sprintf("leagueID_%s/%s", *leagueId, "fixture-event.csv"),
 					false,
 				)
+				fixtureData, err := s.client.FixtureEventService.Convert(fixtureEventResult, !s.fileExists(finalPath))
+				if err != nil {
+					wrapError("unable to write flat data", err)
+				}
+
 				s.writeData(finalPath, fixtureData)
 			}
 		}
@@ -337,13 +342,12 @@ func (s Switch) fixtureEvent() func(string) error {
 func (s Switch) fixtureLineup() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
-		authKeys := authKeysFlag{}
+
 		fixtureEventCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-		fixtureEventCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		fixtureEventCmd.Var(&ids, "fixtureId", "The fixture id of league to fetch data.")
 		leagueId, basepath, _ := s.clientEventFlags(fixtureEventCmd)
 
-		if err := s.checkArgs(3); err != nil {
+		if err := s.checkArgs(2); err != nil {
 			return err
 		}
 
@@ -351,13 +355,25 @@ func (s Switch) fixtureLineup() func(string) error {
 			return err
 		}
 
-		apiKeys = strings.Split(authKeys[0], ",")
-
+		waitFlag := true
+		requestCount = 0
 		for _, id := range strings.Split(ids[0], ",") {
 			fixtureId, err := strconv.Atoi(id)
 
 			if err != nil {
 				wrapError("unable to convert string to int", err)
+			}
+
+			if waitFlag {
+				startTime = time.Now()
+			}
+
+			requestCount++
+			waitFlag = s.wait(startTime, requestCount)
+
+			//Reset request count after wait
+			if waitFlag {
+				requestCount = 0
 			}
 
 			fixtureLineUpResult, _, err := s.client.FixtureLineUpService.GetLineUpForFixture(context.Background(), fixtureId)
@@ -389,9 +405,7 @@ func (s Switch) fixtureLineup() func(string) error {
 func (s Switch) playerStat() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
-		authKeys := authKeysFlag{}
 		playerStatCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-		playerStatCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		playerStatCmd.Var(&ids, "fixtureId", "The fixture id of league to fetch data.")
 		leagueId, basepath, _ := s.clientEventFlags(playerStatCmd)
 
@@ -403,13 +417,25 @@ func (s Switch) playerStat() func(string) error {
 			return err
 		}
 
-		apiKeys = strings.Split(authKeys[0], ",")
-
+		waitFlag := true
+		requestCount = 0
 		for _, id := range strings.Split(ids[0], ",") {
 			fixtureId, err := strconv.Atoi(id)
 
 			if err != nil {
 				wrapError("unable to convert string to int", err)
+			}
+
+			if waitFlag {
+				startTime = time.Now()
+			}
+
+			requestCount++
+			waitFlag = s.wait(startTime, requestCount)
+
+			//Reset request count after wait
+			if waitFlag {
+				requestCount = 0
 			}
 
 			playerStatResult, _, err := s.client.PlayerStatService.GetPlayerStatByFixtureID(context.Background(), fixtureId)
@@ -441,9 +467,7 @@ func (s Switch) playerStat() func(string) error {
 func (s Switch) topScorer() func(string) error {
 	return func(cmd string) error {
 		ids := idsFlag{}
-		authKeys := authKeysFlag{}
 		topScorerCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-		topScorerCmd.Var(&authKeys, "authKey", "The authentication key to access api.")
 		topScorerCmd.Var(&ids, "leagueId", "The fixture id of league to fetch data.")
 		basepath, _ := s.clientFlags(topScorerCmd)
 
@@ -454,8 +478,6 @@ func (s Switch) topScorer() func(string) error {
 		if err := s.parseCmd(topScorerCmd); err != nil {
 			return err
 		}
-
-		apiKeys = strings.Split(authKeys[0], ",")
 
 		for _, id := range strings.Split(ids[0], ",") {
 			leagueId, err := strconv.Atoi(id)
@@ -501,18 +523,19 @@ func (s Switch) getFileDestination(basepath, filename string, delIfExists bool) 
 }
 
 func (s Switch) writeData(filepath string, data [][]string) error {
-	if err := csvutil.Write(filepath, data); err != nil {
+	if err := fileutil.Write(filepath, data); err != nil {
 		wrapError("unable to write result", err)
 	}
 	fmt.Printf("data written to file %s successfully\n", filepath)
 	return nil
 }
 
-func (s Switch) health() func(string) error {
-	return func(cmd string) error {
-		fmt.Println("check health of api")
-		return nil
+func (s Switch) write(filepath string, data []string) error {
+	if err := fileutil.WriteToFile(filepath, data); err != nil {
+		wrapError("unable to write result", err)
 	}
+	fmt.Printf("Fixture Ids written to file %s successfully\n", filepath)
+	return nil
 }
 
 func (s Switch) clientFlags(f *flag.FlagSet) (*string, *string) {
@@ -561,4 +584,19 @@ func (s Switch) fileExists(filename string) bool {
 		return false
 	}
 	return !info.IsDir()
+}
+
+//Check if request count per minute exceeded
+//If limit exceeded then wait for 61 seconds
+func (s Switch) wait(startTime time.Time, reqCount int) bool {
+	waitFlag := false
+	if reqCount == maxReqPerMinute {
+		elapsed := time.Now().Sub(startTime)
+		if elapsed.Milliseconds() <= 58*1000 {
+			fmt.Printf("Request limit per minute exceeded.Waiting for %d s before new request.\n", 61)
+			time.Sleep(time.Duration(61) * time.Second)
+			waitFlag = true
+		}
+	}
+	return waitFlag
 }
