@@ -50,5 +50,6 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+*.csv
 
 bin/
