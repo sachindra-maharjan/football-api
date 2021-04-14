@@ -217,7 +217,7 @@ func (s Switch) fixtures() func(string) error {
 				s.writeData(finalPath, fixtureData)
 
 				fixtureIdFile := s.getFileDestination(*basepath,
-					fmt.Sprintf("leagueID_%d/%s", leagueId, "fixtureid.csv"),
+					fmt.Sprintf("leagueID_%d/%s", leagueId, "fixtureid.txt"),
 					true,
 				)
 				fixtureIds := []string{}
@@ -591,12 +591,12 @@ func (s Switch) fileExists(filename string) bool {
 func (s Switch) wait(startTime time.Time, reqCount int) bool {
 	waitFlag := false
 	if reqCount == maxReqPerMinute {
-		elapsed := time.Now().Sub(startTime)
-		if elapsed.Milliseconds() <= 58*1000 {
-			fmt.Printf("Request limit per minute exceeded.Waiting for %d s before new request.\n", 61)
-			time.Sleep(time.Duration(61) * time.Second)
-			waitFlag = true
-		}
+		//elapsed := time.Now().Sub(startTime)
+		//if elapsed.Milliseconds() <= 58*1000 {
+		fmt.Printf("Request limit per minute exceeded.Waiting for %d s before new request.\n", 90)
+		time.Sleep(time.Duration(90) * time.Second)
+		waitFlag = true
+		//}
 	}
 	return waitFlag
 }
