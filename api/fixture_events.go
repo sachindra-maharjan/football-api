@@ -71,18 +71,18 @@ func (service *FixtureEventService) Convert(result *FixtureEventResult, includeH
 
 func (service *FixtureEventService) getHeader() []string {
 	var row []string
-	row = append(row, "FixtureID")
-	row = append(row, "Elapsed")
-	row = append(row, "ElapsedPlus")
-	row = append(row, "TeamID")
-	row = append(row, "TeamName")
-	row = append(row, "PlayerID")
-	row = append(row, "Player")
-	row = append(row, "AssistPlayerID")
-	row = append(row, "AssistedBy")
-	row = append(row, "Type")
-	row = append(row, "Detail")
-	row = append(row, "Comments")
+	row = append(row, "fixture_id")
+	row = append(row, "elapsed")
+	row = append(row, "elapsed_plus")
+	row = append(row, "team_id")
+	row = append(row, "team_name")
+	row = append(row, "player_id")
+	row = append(row, "player")
+	row = append(row, "assist_player_id")
+	row = append(row, "assisted_by")
+	row = append(row, "type")
+	row = append(row, "detail")
+	row = append(row, "comments")
 	return row
 }
 

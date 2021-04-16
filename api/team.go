@@ -70,18 +70,18 @@ func (l *TeamService) Convert(teamResult *TeamResult, includeHead bool) ([][]str
 //GetHead Returns the array of head fields
 func (service *TeamService) getHead() []string {
 	var row []string
-	row = append(row, "LeagueID")
-	row = append(row, "TeamID")
-	row = append(row, "Name")
-	row = append(row, "Code")
-	row = append(row, "Country")
-	row = append(row, "IsNational")
-	row = append(row, "Founded")
-	row = append(row, "VenueName")
-	row = append(row, "VenueSurface")
-	row = append(row, "VenueAddress")
-	row = append(row, "VenueCity")
-	row = append(row, "VenueCapacity")
+	row = append(row, "league_id")
+	row = append(row, "team_id")
+	row = append(row, "name")
+	row = append(row, "code")
+	row = append(row, "country")
+	row = append(row, "is_national")
+	row = append(row, "founded")
+	row = append(row, "venuename")
+	row = append(row, "venuesurface")
+	row = append(row, "venueaddress")
+	row = append(row, "venuecity")
+	row = append(row, "venuecapacity")
 	return row
 }
 

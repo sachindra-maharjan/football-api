@@ -103,11 +103,11 @@ func (service *FixtureLineUpService) getStartingXIData(fixtureID int, team Fixtu
 //getStartingXIHead Returns the array of head fields
 func (service *FixtureLineUpService) getStartingXIHead() []string {
 	var row []string
-	row = append(row, "FixtureID")
-	row = append(row, "CoachID")
-	row = append(row, "CoachName")
-	row = append(row, "Formation")
-	row = append(row, "TeamID")
-	row = append(row, "PlayerID|Payer|Number|Pos-PlayerID|Payer|Number|Pos")
+	row = append(row, "fixture_id")
+	row = append(row, "coach_id")
+	row = append(row, "coach_name")
+	row = append(row, "formation")
+	row = append(row, "team_id")
+	row = append(row, "player_id|name|number|pos-player_id")
 	return row
 }
