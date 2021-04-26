@@ -2,6 +2,7 @@ package fileutil
 
 import (
 	"encoding/csv"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -87,4 +88,39 @@ func check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+//FileReader Opens file in read mode and returns new Reader
+func FileReader(file string) (*csv.Reader, error) {
+	csvfile, err := Read(file)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return csv.NewReader(csvfile), nil
+}
+
+//Read Creates new file in the file path
+func Read(path string) (*os.File, error) {
+
+	if !FileExists(path) {
+		return nil, fmt.Errorf("File %s does not exists.", path)
+	}
+
+	readFile := func(path string) (*os.File, error) {
+		file, err := os.OpenFile(path, os.O_RDONLY, 0444)
+		if err != nil {
+			return nil, err
+		}
+		return file, nil
+	}
+
+	file, err := readFile(path)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return file, nil
 }

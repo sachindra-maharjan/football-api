@@ -93,7 +93,7 @@ func (service *FixtureEventService) getData(f FixtureEvent, fixtureID int) []str
 	row = append(row, strconv.Itoa(f.ElapsedPlus))
 	row = append(row, strconv.Itoa(f.TeamID))
 	row = append(row, f.TeamName)
-	row = append(row, strconv.Itoa(f.TeamID))
+	row = append(row, strconv.Itoa(f.PlayerID))
 	row = append(row, f.Player)
 	row = append(row, strconv.Itoa(f.AssistPlayerID))
 	row = append(row, f.AssistedBy)

@@ -1,6 +1,8 @@
 package api
 
-import "time"
+import (
+	"time"
+)
 
 //PlayerService gets the player information from api call
 type PlayerService service

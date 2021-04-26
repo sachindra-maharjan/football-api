@@ -39,7 +39,7 @@ type ApiClient interface {
 func NewSwitch() (Switch, error) {
 	keys := os.Getenv("RAPID_API_KEYS")
 	if len(keys) == 0 {
-		return Switch{}, fmt.Errorf("Environment variable 'RAPID_API_KEY' not found.")
+		return Switch{}, fmt.Errorf("Environment variable 'RAPID_API_KEYS' not found.")
 	}
 
 	apiKeys = strings.Split(keys, ",")
