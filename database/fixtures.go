@@ -57,7 +57,7 @@ func (s *FixtureService) Add(ctx context.Context, records [][]string) error {
 		f.FixtureID = parseInt(r[1])
 		f.League.Name = r[2]
 		f.League.Country = r[3]
-		f.EventDate = parseDate(r[6])
+		f.EventDate = parseDate(time.RFC3339, r[6])
 		f.EventTimestamp = int64(parseInt(r[7]))
 		f.FirstHalfStart = int64(parseInt(r[8]))
 		f.SecondHalfStart = int64(parseInt(r[9]))

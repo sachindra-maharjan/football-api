@@ -15,9 +15,10 @@ type dbservice struct {
 type FSClient struct {
 	fs *firestore.Client
 
-	common         dbservice
-	LeagueService  *LeagueService
-	FixtureService *FixtureService
+	common           dbservice
+	LeagueService    *LeagueService
+	FixtureService   *FixtureService
+	StandingsService *StandingsService
 }
 
 func NewClient(ctx context.Context, projectId string) (*FSClient, error) {
@@ -35,6 +36,7 @@ func NewClient(ctx context.Context, projectId string) (*FSClient, error) {
 	fsc.common.client = fsc
 	fsc.LeagueService = (*LeagueService)(&fsc.common)
 	fsc.FixtureService = (*FixtureService)(&fsc.common)
+	fsc.StandingsService = (*StandingsService)(&fsc.common)
 
 	return fsc, nil
 }
@@ -55,8 +57,8 @@ func parseInt(val string) int {
 	return result
 }
 
-func parseDate(val string) time.Time {
-	mydate, err := time.Parse("2018-08-10 19:00:00", val)
+func parseDate(format string, val string) time.Time {
+	mydate, err := time.Parse(format, val)
 	if err != nil {
 		return time.Now().UTC()
 	}

@@ -4,23 +4,24 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 )
 
 type LeagueService dbservice
 
 type League struct {
-	LeagueID    int    `firestore:"league_id,omitempty"`
-	Name        string `firestore:"name,omitempty"`
-	LeagueType  string `firestore:"type,omitempty"`
-	Country     string `firestore:"country,omitempty"`
-	CountryCode string `firestore:"country_code,omitempty"`
-	Season      string `firestore:"season,omitempty"`
-	SeasonStart string `firestore:"season_start,omitempty"`
-	SeasonEnd   string `firestore:"season_end,omitempty"`
-	LogoURL     string `firestore:"logo,omitempty"`
-	FlagURL     string `firestore:"flag,omitempty"`
-	Standings   bool   `firestore:"standings,omitempty"`
-	IsCurrent   bool   `firestore:"is_current,omitempty"`
+	LeagueID    int       `firestore:"league_id,omitempty"`
+	Name        string    `firestore:"name,omitempty"`
+	LeagueType  string    `firestore:"type,omitempty"`
+	Country     string    `firestore:"country,omitempty"`
+	CountryCode string    `firestore:"country_code,omitempty"`
+	Season      string    `firestore:"season,omitempty"`
+	SeasonStart time.Time `firestore:"season_start,omitempty"`
+	SeasonEnd   time.Time `firestore:"season_end,omitempty"`
+	LogoURL     string    `firestore:"logo,omitempty"`
+	FlagURL     string    `firestore:"flag,omitempty"`
+	Standings   bool      `firestore:"standings,omitempty"`
+	IsCurrent   bool      `firestore:"is_current,omitempty"`
 	Coverage    struct {
 		Standings       bool `firestore:"standings,omitempty"`
 		FixtureCoverage struct {
@@ -50,8 +51,8 @@ func (s *LeagueService) Add(ctx context.Context, records [][]string) error {
 		l.CountryCode = r[3]
 		l.Country = r[4]
 		l.Season = r[5]
-		l.SeasonStart = r[6]
-		l.SeasonEnd = r[7]
+		l.SeasonStart = parseDate("2006-01-02", r[6])
+		l.SeasonEnd = parseDate("2006-01-02", r[7])
 		l.LogoURL = r[8]
 		l.FlagURL = r[9]
 		l.IsCurrent = parseBool(r[10])

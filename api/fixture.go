@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"strconv"
-	"time"
 )
 
 //FixtureService gets the fixture information from api
@@ -28,20 +27,20 @@ type Fixture struct {
 		Logo    string `json:"logo,omitempty"`
 		Flag    string `json:"flag,omitempty"`
 	} `json:"league"`
-	EventDate       time.Time `json:"event_date,omitempty"`
-	EventTimestamp  int64     `json:"event_timestamp,omitempty"`
-	FirstHalfStart  int       `json:"firstHalfStart,omitempty"`
-	SecondHalfStart int       `json:"secondHalfStart,omitempty"`
-	Round           string    `json:"round,omitempty"`
-	Status          string    `json:"status,omitempty"`
-	StatusShort     string    `json:"statusShort,omitempty"`
-	Elapsed         int       `json:"elapsed,omitempty"`
-	Venue           string    `json:"venue,omitempty"`
-	Referee         string    `json:"referee,omitempty,omitempty"`
-	HomeTeam        team      `json:"homeTeam,omitempty"`
-	AwayTeam        team      `json:"awayTeam,omitempty"`
-	GoalsHomeTeam   int       `json:"goalsHomeTeam,omitempty"`
-	GoalsAwayTeam   int       `json:"goalsAwayTeam,omitempty"`
+	EventDate       string `json:"event_date,omitempty"`
+	EventTimestamp  int64  `json:"event_timestamp,omitempty"`
+	FirstHalfStart  int    `json:"firstHalfStart,omitempty"`
+	SecondHalfStart int    `json:"secondHalfStart,omitempty"`
+	Round           string `json:"round,omitempty"`
+	Status          string `json:"status,omitempty"`
+	StatusShort     string `json:"statusShort,omitempty"`
+	Elapsed         int    `json:"elapsed,omitempty"`
+	Venue           string `json:"venue,omitempty"`
+	Referee         string `json:"referee,omitempty,omitempty"`
+	HomeTeam        team   `json:"homeTeam,omitempty"`
+	AwayTeam        team   `json:"awayTeam,omitempty"`
+	GoalsHomeTeam   int    `json:"goalsHomeTeam,omitempty"`
+	GoalsAwayTeam   int    `json:"goalsAwayTeam,omitempty"`
 	Score           struct {
 		HalfTime  string `json:"halftime,omitempty"`
 		FullTime  string `json:"fulltime,omitempty"`
@@ -133,7 +132,7 @@ func (service *FixtureService) getData(f Fixture) []string {
 	row = append(row, f.League.Country)
 	row = append(row, f.League.Logo)
 	row = append(row, f.League.Flag)
-	row = append(row, f.EventDate.String())
+	row = append(row, f.EventDate)
 	row = append(row, strconv.FormatInt(f.EventTimestamp, 10))
 	row = append(row, strconv.Itoa(f.FirstHalfStart))
 	row = append(row, strconv.Itoa(f.SecondHalfStart))

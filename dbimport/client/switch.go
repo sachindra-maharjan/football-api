@@ -21,8 +21,9 @@ func NewSwitch() (Switch, error) {
 	s := Switch{}
 
 	s.commands = map[Key]func() func(string) error{
-		{database: "firebase", command: "league"}:   s.league,
-		{database: "firebase", command: "fixtures"}: s.fixtures,
+		{database: "firestore", command: "league"}:    s.league,
+		{database: "firestore", command: "fixtures"}:  s.fixtures,
+		{database: "firestore", command: "standings"}: s.standings,
 	}
 
 	return s, nil
@@ -61,7 +62,7 @@ func (s Switch) checkArgs(minArgs int) error {
 
 	fmt.Printf("%d %s %s\n", len(os.Args), os.Args[0], os.Args[1])
 
-	if len(os.Args)-2 < minArgs {
+	if len(os.Args)-1 < minArgs {
 		fmt.Printf(
 			"incorrect use of %s\n%s %s --help\n",
 			os.Args[1], os.Args[0], os.Args[1],
@@ -167,6 +168,32 @@ func (s Switch) fixtures() func(string) error {
 		fmt.Println("Inserting to firestore...")
 
 		client.FixtureService.Add(context.Background(), records[1:][0:])
+
+		fmt.Println("Inserting to firestore complete.")
+
+		return nil
+	}
+}
+
+func (s Switch) standings() func(string) error {
+	return func(cmd string) error {
+		projectID, records, err := s.parseCommand(cmd)
+
+		if err != nil {
+			return err
+		}
+
+		if len(records[0]) != 27 {
+			return fmt.Errorf("Invalid file. Please provide the correct file containing standings data.")
+		}
+
+		client, err := database.NewClient(context.Background(), projectID)
+		if err != nil {
+			return err
+		}
+		fmt.Println("Inserting to firestore...")
+
+		client.StandingsService.Add(context.Background(), records[1:][0:])
 
 		fmt.Println("Inserting to firestore complete.")
 
