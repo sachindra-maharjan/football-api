@@ -15,10 +15,15 @@ type dbservice struct {
 type FSClient struct {
 	fs *firestore.Client
 
-	common           dbservice
-	LeagueService    *LeagueService
-	FixtureService   *FixtureService
-	StandingsService *StandingsService
+	common                   dbservice
+	LeagueService            *LeagueService
+	FixtureService           *FixtureService
+	StandingsService         *StandingsService
+	FixtureEventService      *FixtureEventService
+	FixtureLineUpService     *FixtureLineUpService
+	FixturePlayerStatService *FixturePlayerStatService
+	TopScorerService         *TopScorerService
+	TeamService              *TeamService
 }
 
 func NewClient(ctx context.Context, projectId string) (*FSClient, error) {
@@ -37,6 +42,11 @@ func NewClient(ctx context.Context, projectId string) (*FSClient, error) {
 	fsc.LeagueService = (*LeagueService)(&fsc.common)
 	fsc.FixtureService = (*FixtureService)(&fsc.common)
 	fsc.StandingsService = (*StandingsService)(&fsc.common)
+	fsc.FixtureEventService = (*FixtureEventService)(&fsc.common)
+	fsc.FixtureLineUpService = (*FixtureLineUpService)(&fsc.common)
+	fsc.FixturePlayerStatService = (*FixturePlayerStatService)(&fsc.common)
+	fsc.TopScorerService = (*TopScorerService)(&fsc.common)
+	fsc.TeamService = (*TeamService)(&fsc.common)
 
 	return fsc, nil
 }

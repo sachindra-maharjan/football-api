@@ -15,15 +15,30 @@ type Key struct {
 
 type Switch struct {
 	commands map[Key]func() func(string) error
+	leagues  map[string]string
+}
+
+var leagues = func() map[string]string {
+	return map[string]string{
+		"pl":         "premierleague",
+		"laliga":     "laliga",
+		"bundesliga": "bundesliga",
+		"serie-a":    "serieA",
+	}
 }
 
 func NewSwitch() (Switch, error) {
 	s := Switch{}
 
 	s.commands = map[Key]func() func(string) error{
-		{database: "firestore", command: "league"}:    s.league,
-		{database: "firestore", command: "fixtures"}:  s.fixtures,
-		{database: "firestore", command: "standings"}: s.standings,
+		{database: "firestore", command: "league"}:              s.league,
+		{database: "firestore", command: "fixtures"}:            s.fixtures,
+		{database: "firestore", command: "standings"}:           s.standings,
+		{database: "firestore", command: "fixture-events"}:      s.fixtureEvents,
+		{database: "firestore", command: "fixture-lineup"}:      s.fixtureLinups,
+		{database: "firestore", command: "fixture-player-stat"}: s.fixturePlayerStat,
+		{database: "firestore", command: "top-scorer"}:          s.topScorer,
+		{database: "firestore", command: "teams"}:               s.teams,
 	}
 
 	return s, nil
@@ -47,20 +62,19 @@ func wrapError(customMessage string, originalError error) error {
 	return fmt.Errorf("%s : %v", customMessage, originalError)
 }
 
-func (s Switch) clientFlags(f *flag.FlagSet) (*string, *string, *string) {
-	projectID, file, format := "", "", ""
+func (s Switch) clientFlags(f *flag.FlagSet) (*string, *string, *string, *string) {
+	projectID, file, format, leagueName := "", "", "", ""
 	f.StringVar(&file, "file", "", "The source file.")
 	f.StringVar(&format, "format", "", "The format of source file.")
 	f.StringVar(&projectID, "projectId", "", "Google cloud project ID.")
-	return &file, &format, &projectID
+	f.StringVar(&leagueName, "leagueName", "", "League Name")
+	return &file, &format, &projectID, &leagueName
 }
 
 func (s Switch) checkArgs(minArgs int) error {
 	if len(os.Args) == 4 && os.Args[3] == "--help" {
 		return nil
 	}
-
-	fmt.Printf("%d %s %s\n", len(os.Args), os.Args[0], os.Args[1])
 
 	if len(os.Args)-1 < minArgs {
 		fmt.Printf(
@@ -99,25 +113,31 @@ func (s Switch) readAll(file string) ([][]string, error) {
 	return reader.ReadAll()
 }
 
-func (s Switch) parseCommand(cmd string) (string, [][]string, error) {
+func (s Switch) parseCommand(cmd string) (string, string, [][]string, error) {
 	leagueCmd := flag.NewFlagSet(cmd, flag.ExitOnError)
-	file, _, projectID := s.clientFlags(leagueCmd)
+	file, _, projectID, leagueName := s.clientFlags(leagueCmd)
 
 	if err := s.checkArgs(3); err != nil {
-		return "", nil, err
+		return "", "", nil, err
 	}
 
 	if err := s.parseCmd(leagueCmd); err != nil {
-		return "", nil, err
+		return "", "", nil, err
 	}
 
 	if *projectID == "" {
 		*projectID = os.Getenv("GCLOUD_PROJECT_ID")
 		if *projectID == "" {
-			return "", nil, fmt.Errorf("GCloud Project ID not found." +
+			return "", "", nil, fmt.Errorf("GCloud Project ID not found." +
 				"Project ID can be set in envionment variable 'GCLOUD_PROJECT_ID' OR " +
 				"passed as argument.")
 		}
+	}
+
+	if *leagueName == "" {
+		return "", "", nil, fmt.Errorf("League name is mandatory.")
+	} else if _, ok := leagues()[*leagueName]; !ok {
+		return "", "", nil, fmt.Errorf("League name is not valid.")
 	}
 
 	fmt.Printf("Using ProjectID %s \n", *projectID)
@@ -127,14 +147,14 @@ func (s Switch) parseCommand(cmd string) (string, [][]string, error) {
 	fmt.Printf("Read successfully. Found %d lines.\n", len(records))
 
 	if err != nil {
-		return "", nil, err
+		return "", "", nil, err
 	}
-	return *projectID, records, nil
+	return *projectID, leagues()[*leagueName], records, nil
 }
 
 func (s Switch) league() func(string) error {
 	return func(cmd string) error {
-		projectID, records, err := s.parseCommand(cmd)
+		projectID, leagueName, records, err := s.parseCommand(cmd)
 
 		if err != nil {
 			return err
@@ -145,7 +165,7 @@ func (s Switch) league() func(string) error {
 			return err
 		}
 		fmt.Println("Inserting to firestore...")
-		client.LeagueService.Add(context.Background(), records[1:][0:])
+		client.LeagueService.Add(context.Background(), leagueName, records[1:][0:])
 
 		fmt.Println("Inserting to firestore complete.")
 
@@ -155,7 +175,7 @@ func (s Switch) league() func(string) error {
 
 func (s Switch) fixtures() func(string) error {
 	return func(cmd string) error {
-		projectID, records, err := s.parseCommand(cmd)
+		projectID, leagueName, records, err := s.parseCommand(cmd)
 
 		if err != nil {
 			return err
@@ -167,7 +187,7 @@ func (s Switch) fixtures() func(string) error {
 		}
 		fmt.Println("Inserting to firestore...")
 
-		client.FixtureService.Add(context.Background(), records[1:][0:])
+		client.FixtureService.Add(context.Background(), leagueName, records[1:][0:])
 
 		fmt.Println("Inserting to firestore complete.")
 
@@ -177,7 +197,7 @@ func (s Switch) fixtures() func(string) error {
 
 func (s Switch) standings() func(string) error {
 	return func(cmd string) error {
-		projectID, records, err := s.parseCommand(cmd)
+		projectID, leagueName, records, err := s.parseCommand(cmd)
 
 		if err != nil {
 			return err
@@ -193,7 +213,138 @@ func (s Switch) standings() func(string) error {
 		}
 		fmt.Println("Inserting to firestore...")
 
-		client.StandingsService.Add(context.Background(), records[1:][0:])
+		client.StandingsService.Add(context.Background(), leagueName, records[1:][0:])
+
+		fmt.Println("Inserting to firestore complete.")
+
+		return nil
+	}
+
+}
+
+func (s Switch) fixtureEvents() func(string) error {
+	return func(cmd string) error {
+		projectID, leagueName, records, err := s.parseCommand(cmd)
+
+		if err != nil {
+			return err
+		}
+
+		if len(records[0]) != 12 {
+			return fmt.Errorf("Invalid file. Please provide the correct file containing fixture events data.")
+		}
+
+		client, err := database.NewClient(context.Background(), projectID)
+		if err != nil {
+			return err
+		}
+		fmt.Println("Inserting to firestore...")
+
+		client.FixtureEventService.Add(context.Background(), leagueName, records[1:][0:])
+
+		fmt.Println("Inserting to firestore complete.")
+
+		return nil
+	}
+}
+
+func (s Switch) fixtureLinups() func(string) error {
+	return func(cmd string) error {
+		projectID, leagueName, records, err := s.parseCommand(cmd)
+
+		if err != nil {
+			return err
+		}
+
+		if len(records[0]) != 6 {
+			return fmt.Errorf("Invalid file. Please provide the correct file containing fixture line-up data.")
+		}
+
+		client, err := database.NewClient(context.Background(), projectID)
+		if err != nil {
+			return err
+		}
+		fmt.Println("Inserting to firestore...")
+
+		client.FixtureLineUpService.Add(context.Background(), leagueName, records[1:][0:])
+
+		fmt.Println("Inserting to firestore complete.")
+
+		return nil
+	}
+}
+
+func (s Switch) fixturePlayerStat() func(string) error {
+	return func(cmd string) error {
+		projectID, leagueName, records, err := s.parseCommand(cmd)
+
+		if err != nil {
+			return err
+		}
+
+		if len(records[0]) != 40 {
+			return fmt.Errorf("Invalid file. Please provide the correct file containing fixture player statistics data.")
+		}
+
+		client, err := database.NewClient(context.Background(), projectID)
+		if err != nil {
+			return err
+		}
+		fmt.Println("Inserting to firestore...")
+
+		client.FixturePlayerStatService.Add(context.Background(), leagueName, records[1:][0:])
+
+		fmt.Println("Inserting to firestore complete.")
+
+		return nil
+	}
+}
+
+func (s Switch) topScorer() func(string) error {
+	return func(cmd string) error {
+		projectID, leagueName, records, err := s.parseCommand(cmd)
+
+		if err != nil {
+			return err
+		}
+
+		if len(records[0]) != 22 {
+			return fmt.Errorf("Invalid file. Please provide the correct file containing top scorer data.")
+		}
+
+		client, err := database.NewClient(context.Background(), projectID)
+		if err != nil {
+			return err
+		}
+		fmt.Println("Inserting to firestore...")
+
+		client.TopScorerService.Add(context.Background(), leagueName, records[1:][0:])
+
+		fmt.Println("Inserting to firestore complete.")
+
+		return nil
+	}
+}
+
+func (s Switch) teams() func(string) error {
+	return func(cmd string) error {
+		projectID, leagueName, records, err := s.parseCommand(cmd)
+
+		if err != nil {
+			return err
+		}
+
+		if len(records[0]) != 22 {
+			return fmt.Errorf("Invalid file. Please provide the correct file containing team data.")
+		}
+
+		client, err := database.NewClient(context.Background(), projectID)
+		if err != nil {
+			return err
+		}
+		fmt.Println("Inserting to firestore...")
+
+		client.FixturePlayerStatService.Add(context.Background(), leagueName, records[1:][0:])
 
 		fmt.Println("Inserting to firestore complete.")
 

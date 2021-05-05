@@ -3,14 +3,13 @@ package database
 import (
 	"context"
 	"fmt"
-	"strings"
 )
 
 type StandingsService dbservice
 
 //Standings contains league table stangings
 type Standings struct {
-	LeagueID    int    `firestore:league_id,omitempty`
+	LeagueID    int    `firestore:"league_id,omitempty"`
 	Rank        int    `firestore:"rank,omitempty"`
 	TeamID      int    `firestore:"team_id,omitempty"`
 	TeamName    string `firestore:"teamName,omitempty"`
@@ -37,7 +36,7 @@ type Stat struct {
 	GoalsAgainst int `firestore:"goalsAgainst,omitempty"`
 }
 
-func (service *StandingsService) Add(ctx context.Context, records [][]string) error {
+func (service *StandingsService) Add(ctx context.Context, leagueName string, records [][]string) error {
 	fmt.Printf("Adding %d new data to firestore \n", len(records))
 
 	batch := service.client.fs.Batch()
@@ -72,11 +71,15 @@ func (service *StandingsService) Add(ctx context.Context, records [][]string) er
 		s.AwayStat.Draw = parseInt(r[24])
 		s.AwayStat.GoalsFor = parseInt(r[25])
 		s.AwayStat.GoalsAgainst = parseInt(r[26])
+		leagueRef := service.client.fs.Collection("football-leagues").Doc(leagueName)
 
-		docId := strings.ToLower(strings.ReplaceAll(s.Group, " ", "") + "#" + r[0] + "#" + r[1])
-		docRef := service.client.fs.Collection("standings").Doc(docId)
+		docRef := leagueRef.
+			Collection("leagues").
+			Doc("leagueId_" + r[0]).
+			Collection("standings").
+			Doc("team_" + r[2])
+
 		batch.Set(docRef, s)
-
 	}
 
 	_, err := batch.Commit(ctx)

@@ -29,14 +29,15 @@ type LineUp struct {
 
 //FixtureTeam Fixture Team Info
 type FixtureTeam struct {
-	Coach      string    `json:"coach,omitempty"`
-	CoachID    int       `json:"coach_id,omitempty"`
-	Formation  string    `json:"formation,omitempty"`
-	StartingXI []StartXI `json:"startXI,omitempty"`
+	Coach      string       `json:"coach,omitempty"`
+	CoachID    int          `json:"coach_id,omitempty"`
+	Formation  string       `json:"formation,omitempty"`
+	StartingXI []PlayerInfo `json:"startXI,omitempty"`
+	Substitute []PlayerInfo `json:"substitutes,omitempty"`
 }
 
-//StartXI Starting Player Info
-type StartXI struct {
+//Player Starting Player Info
+type PlayerInfo struct {
 	TeamID     int    `json:"team_id,omitemtpy"`
 	PlayerID   int    `json:"player_id,omitempty"`
 	PlayerName string `json:"player,omitempty"`
@@ -85,19 +86,30 @@ func (f *FixtureLineUpService) Convert(result *FixtureLineUpResult, includeHead 
 func (service *FixtureLineUpService) getStartingXIData(fixtureID int, team FixtureTeam) []string {
 	var row []string
 	var playerXI string
+	var substitutes string
 	row = append(row, strconv.Itoa(fixtureID))
 	row = append(row, strconv.Itoa(team.CoachID))
 	row = append(row, team.Coach)
 	row = append(row, team.Formation)
 
-	for i, player := range team.StartingXI {
+	playerXI, row = getPlayers(team.StartingXI, row)
+	row = append(row, strings.TrimRight(playerXI, "|"))
+
+	substitutes, row = getPlayers(team.Substitute, row)
+	row = append(row, strings.TrimRight(substitutes, "|"))
+
+	return row
+}
+
+func getPlayers(players []PlayerInfo, row []string) (string, []string) {
+	var playerInfo string
+	for i, player := range players {
 		if i == 0 {
 			row = append(row, strconv.Itoa(player.TeamID))
 		}
-		playerXI = playerXI + fmt.Sprintf("%d|%s|%d|%s-", player.PlayerID, player.PlayerName, player.Number, player.Position)
+		playerInfo = playerInfo + fmt.Sprintf("%d-%s-%d-%s|", player.PlayerID, player.PlayerName, player.Number, player.Position)
 	}
-	row = append(row, strings.TrimRight(playerXI, "-"))
-	return row
+	return playerInfo, row
 }
 
 //getStartingXIHead Returns the array of head fields
@@ -108,6 +120,7 @@ func (service *FixtureLineUpService) getStartingXIHead() []string {
 	row = append(row, "coach_name")
 	row = append(row, "formation")
 	row = append(row, "team_id")
-	row = append(row, "player_id|name|number|pos-player_id")
+	row = append(row, "startingXI")
+	row = append(row, "substitutes")
 	return row
 }

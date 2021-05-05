@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 )
 
@@ -45,7 +44,7 @@ type team struct {
 	Logo     string `firestore:"logo,omitempty"`
 }
 
-func (s *FixtureService) Add(ctx context.Context, records [][]string) error {
+func (s *FixtureService) Add(ctx context.Context, leagueName string, records [][]string) error {
 	fmt.Printf("Adding %d new data to firestore \n", len(records))
 
 	batch := s.client.fs.Batch()
@@ -80,8 +79,13 @@ func (s *FixtureService) Add(ctx context.Context, records [][]string) error {
 		f.Score.ExtraTime = r[26]
 		f.Score.Penalty = r[27]
 
-		docId := strings.ToLower(strings.ReplaceAll(f.League.Name, " ", "") + "#" + r[0] + "#" + r[1])
-		docRef := s.client.fs.Collection("fixtures").Doc(docId)
+		leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
+
+		docRef := leagueRef.
+			Collection("leagues").
+			Doc("leagueId_" + r[0]).
+			Collection("fixtures").
+			Doc("fixtureId_" + r[1])
 		batch.Set(docRef, f)
 
 	}
