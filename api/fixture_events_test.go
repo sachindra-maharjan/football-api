@@ -26,7 +26,7 @@ func TestFixtureEvent_GetFixtureEvents(t *testing.T) {
 		fmt.Fprint(w, string(data))
 	})
 
-	result, _, err := client.FixtureEventService.GetFixtureEvent(context.Background(), 65)
+	result, _, err := client.FixtureEventService.GetFixtureEvent(context.Background(), 2, 65)
 
 	if err != nil {
 		t.Fatalf("StandingService_GetLeagueStanding returned error %v", err)
@@ -72,7 +72,7 @@ func TestFixtureEvent_GetAllFixtureEventsWithRateLimits(t *testing.T) {
 		if waitFlag {
 			requestCount = 0
 		}
-		_, _, err = client.FixtureEventService.GetFixtureEvent(context.Background(), 65)
+		_, _, err = client.FixtureEventService.GetFixtureEvent(context.Background(), 2, 65)
 
 		if err == nil {
 			remaining--

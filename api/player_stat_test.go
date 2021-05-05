@@ -21,7 +21,7 @@ func TestPlayerStat_GetPlayerStatByFixtureID(t *testing.T) {
 		fmt.Fprint(w, string(data))
 	})
 
-	result, _, err := client.PlayerStatService.GetPlayerStatByFixtureID(context.Background(), 169080)
+	result, _, err := client.PlayerStatService.GetPlayerStatByFixtureID(context.Background(), 2, 169080)
 
 	if err != nil {
 		t.Fatalf("PlayerStatService_GetPlayerStatByFixtureID returned error %v", err)

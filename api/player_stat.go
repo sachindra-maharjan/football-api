@@ -14,6 +14,7 @@ type PlayerStatResult struct {
 	API struct {
 		Results    int          `json:"results"`
 		PlayerStat []PlayerStat `json:"players"`
+		leagueID   int          `json:"leagueID,omitempty"`
 		FixtureID  int          `json:"fixtureID,omitempty"`
 	} `json:"api"`
 }
@@ -79,7 +80,7 @@ type PlayerStat struct {
 	} `json:"penalty,omitempty"`
 }
 
-func (p *PlayerStatService) GetPlayerStatByFixtureID(context context.Context, fixtureID int) (*PlayerStatResult, *Response, error) {
+func (p *PlayerStatService) GetPlayerStatByFixtureID(context context.Context, leagueID int, fixtureID int) (*PlayerStatResult, *Response, error) {
 	r, err := p.client.NewRequest("GET", "players/fixture/"+fmt.Sprint(fixtureID), nil)
 	if err != nil {
 		return nil, nil, err
@@ -92,6 +93,7 @@ func (p *PlayerStatService) GetPlayerStatByFixtureID(context context.Context, fi
 		return nil, nil, err
 	}
 
+	playerStatResult.API.leagueID = leagueID
 	playerStatResult.API.FixtureID = fixtureID
 	return playerStatResult, response, nil
 
@@ -109,14 +111,15 @@ func (p *PlayerStatService) Convert(result *PlayerStatResult, includeHead bool) 
 	}
 
 	for _, playerStat := range result.API.PlayerStat {
-		rows = append(rows, p.getPlayerStat(result.API.FixtureID, playerStat))
+		rows = append(rows, p.getPlayerStat(result.API.leagueID, result.API.FixtureID, playerStat))
 	}
 
 	return rows, nil
 }
 
-func (p *PlayerStatService) getPlayerStat(fixtureId int, playerStat PlayerStat) []string {
+func (p *PlayerStatService) getPlayerStat(leagueId int, fixtureId int, playerStat PlayerStat) []string {
 	row := []string{}
+	row = append(row, strconv.Itoa(leagueId))
 	row = append(row, strconv.Itoa(playerStat.EventID))
 	row = append(row, strconv.Itoa(playerStat.UpdatedAt))
 	row = append(row, strconv.Itoa(playerStat.PlayerID))
@@ -161,6 +164,7 @@ func (p *PlayerStatService) getPlayerStat(fixtureId int, playerStat PlayerStat) 
 
 func (p *PlayerStatService) getHead() []string {
 	rows := []string{}
+	rows = append(rows, "league_id")
 	rows = append(rows, "fixture_id")
 	rows = append(rows, "updated_at")
 	rows = append(rows, "player_id")

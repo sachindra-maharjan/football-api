@@ -15,6 +15,7 @@ type FixtureLineUpResult struct {
 	API struct {
 		Results   int                    `json:"results,omitempty"`
 		LineUp    map[string]FixtureTeam `json:"lineUps,omitempty"`
+		LeagueID  int                    `json:"leagueID,omitempty"`
 		FixtureID int                    `json:"fixtureID,omitempty"`
 	} `json:"api"`
 }
@@ -46,7 +47,7 @@ type PlayerInfo struct {
 }
 
 //GetLineUpForFixture Returns team line up for fixture
-func (l *FixtureLineUpService) GetLineUpForFixture(context context.Context, fixtureID int) (*FixtureLineUpResult, *Response, error) {
+func (l *FixtureLineUpService) GetLineUpForFixture(context context.Context, leagueID int, fixtureID int) (*FixtureLineUpResult, *Response, error) {
 	req, err := l.client.NewRequest("GET", "lineups/"+fmt.Sprint(fixtureID), nil)
 	if err != nil {
 		return nil, nil, err
@@ -59,6 +60,7 @@ func (l *FixtureLineUpService) GetLineUpForFixture(context context.Context, fixt
 		return nil, nil, err
 	}
 
+	fixtureLineUpResult.API.LeagueID = leagueID
 	fixtureLineUpResult.API.FixtureID = fixtureID
 	return fixtureLineUpResult, res, nil
 }
@@ -69,24 +71,25 @@ func (f *FixtureLineUpService) Convert(result *FixtureLineUpResult, includeHead 
 		return nil, fmt.Errorf("invalid league result.")
 	}
 
-	startingXI := [][]string{}
+	linup := [][]string{}
 
 	if includeHead {
-		startingXI = append(startingXI, f.getStartingXIHead())
+		linup = append(linup, f.getStartingXIHead())
 	}
 
 	for _, fixtureTeam := range result.API.LineUp {
-		startingXI = append(startingXI, f.getStartingXIData(result.API.FixtureID, fixtureTeam))
+		linup = append(linup, f.getLineup(result.API.LeagueID, result.API.FixtureID, fixtureTeam))
 	}
 
-	return startingXI, nil
+	return linup, nil
 }
 
 //getStartingXIData Returns flat array from an object
-func (service *FixtureLineUpService) getStartingXIData(fixtureID int, team FixtureTeam) []string {
+func (service *FixtureLineUpService) getLineup(leagueID int, fixtureID int, team FixtureTeam) []string {
 	var row []string
 	var playerXI string
 	var substitutes string
+	row = append(row, strconv.Itoa(leagueID))
 	row = append(row, strconv.Itoa(fixtureID))
 	row = append(row, strconv.Itoa(team.CoachID))
 	row = append(row, team.Coach)

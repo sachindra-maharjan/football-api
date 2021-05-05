@@ -40,19 +40,19 @@ func (s *FixtureEventService) Add(ctx context.Context, leagueName string, record
 
 	for _, r := range records {
 		f := FixtureEvent{}
-		f.LeagueID = 2
-		f.FixtureID = parseInt(r[0])
-		f.Elapsed = parseInt(r[1])
-		f.ElapsedPlus = parseInt(r[2])
-		f.TeamID = parseInt(r[3])
-		f.TeamName = r[4]
-		f.PlayerID = parseInt(r[5])
-		f.Player = r[6]
-		f.AssistPlayerID = parseInt(r[7])
-		f.AssistedBy = r[8]
-		f.Type = r[9]
-		f.Detail = r[10]
-		f.Comments = r[11]
+		f.LeagueID = parseInt(r[0])
+		f.FixtureID = parseInt(r[1])
+		f.Elapsed = parseInt(r[2])
+		f.ElapsedPlus = parseInt(r[3])
+		f.TeamID = parseInt(r[4])
+		f.TeamName = r[5]
+		f.PlayerID = parseInt(r[6])
+		f.Player = r[7]
+		f.AssistPlayerID = parseInt(r[8])
+		f.AssistedBy = r[9]
+		f.Type = r[10]
+		f.Detail = r[11]
+		f.Comments = r[12]
 
 		if _, ok := eventMap[f.FixtureID]; ok {
 			events = eventMap[f.FixtureID]
@@ -64,11 +64,8 @@ func (s *FixtureEventService) Add(ctx context.Context, leagueName string, record
 	}
 
 	for k, v := range eventMap {
-		//fmt.Printf("key: %v \n value: %v \n", k, v)
-		fmt.Printf("adding collection in fixture id: %s \n", "fixture_"+strconv.Itoa(k))
 
 		leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
-
 		docRef := leagueRef.
 			Collection("leagues").
 			Doc("leagueId_" + strconv.Itoa(v.Event[0].LeagueID)).
@@ -76,6 +73,9 @@ func (s *FixtureEventService) Add(ctx context.Context, leagueName string, record
 			Doc("fixtureId_" + strconv.Itoa(k)).
 			Collection("fixture_details").
 			Doc("events")
+
+		fmt.Printf("adding fixture event in %s\n", docRef.Path)
+
 		batch.Set(docRef, v)
 	}
 

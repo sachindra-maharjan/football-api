@@ -314,7 +314,12 @@ func (s Switch) fixtureEvent() func(string) error {
 				requestCount = 0
 			}
 
-			fixtureEventResult, _, err := s.client.FixtureEventService.GetFixtureEvent(context.Background(), fixtureId)
+			leageuID, err := strconv.Atoi(*leagueId)
+			if err != nil {
+				return err
+			}
+
+			fixtureEventResult, _, err := s.client.FixtureEventService.GetFixtureEvent(context.Background(), leageuID, fixtureId)
 
 			if err != nil {
 				return wrapError("could not fetch data", err)
@@ -376,7 +381,8 @@ func (s Switch) fixtureLineup() func(string) error {
 				requestCount = 0
 			}
 
-			fixtureLineUpResult, _, err := s.client.FixtureLineUpService.GetLineUpForFixture(context.Background(), fixtureId)
+			leagueID, err := strconv.Atoi(*leagueId)
+			fixtureLineUpResult, _, err := s.client.FixtureLineUpService.GetLineUpForFixture(context.Background(), leagueID, fixtureId)
 			if err != nil {
 				return wrapError("could not fetch data", err)
 			}
@@ -438,7 +444,12 @@ func (s Switch) playerStat() func(string) error {
 				requestCount = 0
 			}
 
-			playerStatResult, _, err := s.client.PlayerStatService.GetPlayerStatByFixtureID(context.Background(), fixtureId)
+			leagueID, err := strconv.Atoi(*leagueId)
+			if err != nil {
+				return err
+			}
+
+			playerStatResult, _, err := s.client.PlayerStatService.GetPlayerStatByFixtureID(context.Background(), leagueID, fixtureId)
 			if err != nil {
 				return wrapError("could not fetch data", err)
 			}

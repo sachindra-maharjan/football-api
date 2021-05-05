@@ -14,6 +14,7 @@ type FixtureEventResult struct {
 	API struct {
 		Results       int            `json:"results"`
 		FixtureEvents []FixtureEvent `json:"events"`
+		LeagueID      int            `json:"LeageuID,omitempty"`
 		FixtureID     int            `json:"fixtureID,omitempty"`
 	} `json:"api"`
 }
@@ -34,7 +35,7 @@ type FixtureEvent struct {
 }
 
 //GetFixtureEvent Returns events of a fixture
-func (fe *FixtureEventService) GetFixtureEvent(context context.Context, fixtureID int) (*FixtureEventResult, *Response, error) {
+func (fe *FixtureEventService) GetFixtureEvent(context context.Context, leagueID int, fixtureID int) (*FixtureEventResult, *Response, error) {
 	req, err := fe.client.NewRequest("GET", "events/"+fmt.Sprint(fixtureID), nil)
 	if err != nil {
 		return nil, nil, err
@@ -46,6 +47,7 @@ func (fe *FixtureEventService) GetFixtureEvent(context context.Context, fixtureI
 		return nil, nil, err
 	}
 
+	fixtureEventResult.API.LeagueID = leagueID
 	fixtureEventResult.API.FixtureID = fixtureID
 	return fixtureEventResult, resp, nil
 }
@@ -63,7 +65,7 @@ func (service *FixtureEventService) Convert(result *FixtureEventResult, includeH
 	}
 
 	for _, event := range result.API.FixtureEvents {
-		rows = append(rows, service.getData(event, result.API.FixtureID))
+		rows = append(rows, service.getData(event, result.API.LeagueID, result.API.FixtureID))
 	}
 
 	return rows, nil
@@ -71,6 +73,7 @@ func (service *FixtureEventService) Convert(result *FixtureEventResult, includeH
 
 func (service *FixtureEventService) getHeader() []string {
 	var row []string
+	row = append(row, "league_id")
 	row = append(row, "fixture_id")
 	row = append(row, "elapsed")
 	row = append(row, "elapsed_plus")
@@ -86,8 +89,9 @@ func (service *FixtureEventService) getHeader() []string {
 	return row
 }
 
-func (service *FixtureEventService) getData(f FixtureEvent, fixtureID int) []string {
+func (service *FixtureEventService) getData(f FixtureEvent, leagueID int, fixtureID int) []string {
 	var row []string
+	row = append(row, strconv.Itoa(leagueID))
 	row = append(row, strconv.Itoa(fixtureID))
 	row = append(row, strconv.Itoa(f.Elapsed))
 	row = append(row, strconv.Itoa(f.ElapsedPlus))

@@ -21,7 +21,7 @@ func TestFixtureLineUp_GetLineUpForFixture(t *testing.T) {
 		fmt.Fprint(w, string(data))
 	})
 
-	result, _, err := client.FixtureLineUpService.GetLineUpForFixture(context.Background(), 65)
+	result, _, err := client.FixtureLineUpService.GetLineUpForFixture(context.Background(), 2, 65)
 
 	if err != nil {
 		t.Fatalf("StandingService_GetLeagueStanding returned error %v", err)
