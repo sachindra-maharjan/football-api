@@ -256,7 +256,7 @@ func (s Switch) fixtureLinups() func(string) error {
 			return err
 		}
 
-		if len(records[0]) != 6 {
+		if len(records[0]) != 8 {
 			return fmt.Errorf("Invalid file. Please provide the correct file containing fixture line-up data.")
 		}
 

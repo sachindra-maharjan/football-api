@@ -67,6 +67,14 @@ func parseInt(val string) int {
 	return result
 }
 
+func parseInt64(val string) int64 {
+	result, err := strconv.ParseInt(val, 10, 64)
+	if err != nil {
+		return 0
+	}
+	return result
+}
+
 func parseDate(format string, val string) time.Time {
 	mydate, err := time.Parse(format, val)
 	if err != nil {

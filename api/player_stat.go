@@ -14,7 +14,7 @@ type PlayerStatResult struct {
 	API struct {
 		Results    int          `json:"results"`
 		PlayerStat []PlayerStat `json:"players"`
-		leagueID   int          `json:"leagueID,omitempty"`
+		LeagueID   int          `json:"leagueID,omitempty"`
 		FixtureID  int          `json:"fixtureID,omitempty"`
 	} `json:"api"`
 }
@@ -93,7 +93,7 @@ func (p *PlayerStatService) GetPlayerStatByFixtureID(context context.Context, le
 		return nil, nil, err
 	}
 
-	playerStatResult.API.leagueID = leagueID
+	playerStatResult.API.LeagueID = leagueID
 	playerStatResult.API.FixtureID = fixtureID
 	return playerStatResult, response, nil
 
@@ -111,7 +111,7 @@ func (p *PlayerStatService) Convert(result *PlayerStatResult, includeHead bool) 
 	}
 
 	for _, playerStat := range result.API.PlayerStat {
-		rows = append(rows, p.getPlayerStat(result.API.leagueID, result.API.FixtureID, playerStat))
+		rows = append(rows, p.getPlayerStat(result.API.LeagueID, result.API.FixtureID, playerStat))
 	}
 
 	return rows, nil
