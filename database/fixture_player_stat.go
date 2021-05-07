@@ -34,13 +34,13 @@ type PlayerStat struct {
 	Shots         struct {
 		Total int `firestore:"total,omitempty"`
 		On    int `firestore:"on,omitempty"`
-	} `firestore:"shots"`
+	} `firestore:"shots,omitempty"`
 	Goals struct {
 		Total    int `firestore:"total,omitempty"`
 		Conceded int `firestore:"conceded,omitempty"`
 		Assists  int `firestore:"assists,omitempty"`
 		Saves    int `firestore:"saves,omitempty"`
-	} `firestore:"goals"`
+	} `firestore:"goals,omitempty"`
 	Passes struct {
 		Total    int `firestore:"total,omitempty"`
 		Key      int `firestore:"key,omitempty"`
@@ -68,18 +68,20 @@ type PlayerStat struct {
 		Yellow int `firestore:"yellow,omitempty"`
 		Red    int `firestore:"red,omitempty"`
 	} `firestore:"cards,omitempty"`
-	Penalty struct {
-		Won      int `firestore:"won,omitempty"`
-		Commited int `firestore:"commited,omitempty"`
-		Success  int `firestore:"success,omitempty"`
-		Missed   int `firestore:"missed,omitempty"`
-		Saved    int `firestore:"saved,omitempty"`
-	} `firestore:"penalty,omitempty"`
+	Penalty Penalty `firestore:"penalty,omitempty"`
+}
+
+type Penalty struct {
+	Won      int `firestore:"won,omitempty"`
+	Commited int `firestore:"commited,omitempty"`
+	Success  int `firestore:"success,omitempty"`
+	Missed   int `firestore:"missed,omitempty"`
+	Saved    int `firestore:"saved,omitempty"`
 }
 
 func (s *FixturePlayerStatService) Add(ctx context.Context, leagueName string, records [][]string) error {
 	fmt.Printf("Adding %d new fixture event data to firestore \n", len(records))
-	//batch := s.client.fs.Batch()
+	batch := s.client.fs.Batch()
 
 	currentFixture := 0
 	homeTeam := 0
@@ -90,9 +92,16 @@ func (s *FixturePlayerStatService) Add(ctx context.Context, leagueName string, r
 
 		if currentFixture != fixtureId {
 			if fixturePlayerStat.FixtureID > 0 {
-				fmt.Printf("%v", fixturePlayerStat)
-
-				//Persist here
+				leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
+				docRef := leagueRef.
+					Collection("leagues").
+					Doc("leagueId_" + r[0]).
+					Collection("fixtures").
+					Doc("fixtureId_" + r[1]).
+					Collection("fixture_details").
+					Doc("player-stat")
+				fmt.Printf("importing lineup in %s \n ", docRef.Path)
+				batch.Set(docRef, fixturePlayerStat)
 			}
 
 			currentFixture = fixtureId
@@ -124,10 +133,10 @@ func (s *FixturePlayerStatService) Add(ctx context.Context, leagueName string, r
 
 	}
 
-	// _, err := batch.Commit(ctx)
-	// if err != nil {
-	// 	fmt.Println("Error occurred when commiting batch.", err)
-	// }
+	_, err := batch.Commit(ctx)
+	if err != nil {
+		fmt.Println("Error occurred when commiting batch.", err)
+	}
 
 	return nil
 }

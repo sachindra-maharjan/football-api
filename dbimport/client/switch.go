@@ -334,7 +334,7 @@ func (s Switch) teams() func(string) error {
 			return err
 		}
 
-		if len(records[0]) != 22 {
+		if len(records[0]) != 12 {
 			return fmt.Errorf("Invalid file. Please provide the correct file containing team data.")
 		}
 
@@ -344,7 +344,7 @@ func (s Switch) teams() func(string) error {
 		}
 		fmt.Println("Inserting to firestore...")
 
-		client.FixturePlayerStatService.Add(context.Background(), leagueName, records[1:][0:])
+		client.TeamService.Add(context.Background(), leagueName, records[1:][0:])
 
 		fmt.Println("Inserting to firestore complete.")
 

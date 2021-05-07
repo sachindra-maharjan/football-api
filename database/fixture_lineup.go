@@ -9,7 +9,7 @@ import (
 
 type FixtureLineUpService dbservice
 
-type Team struct {
+type FixtureTeams struct {
 	HomeTeam FixtureTeam `firestore:"home_team,omitempty"`
 	AwayTeam FixtureTeam `firestore:"away_team,omitempty"`
 }
@@ -37,10 +37,10 @@ func (s *FixtureLineUpService) Add(ctx context.Context, leagueName string, recor
 	fmt.Printf("Adding %d new fixture event data to firestore \n", len(records))
 
 	batch := s.client.fs.Batch()
-	var team Team
+	var team FixtureTeams
 	for i, r := range records {
 		if i%2 == 0 {
-			team = Team{}
+			team = FixtureTeams{}
 			team.HomeTeam = getTeam(r)
 		} else {
 			team.AwayTeam = getTeam(r)
