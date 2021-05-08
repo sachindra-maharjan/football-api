@@ -230,7 +230,7 @@ func (s Switch) fixtureEvents() func(string) error {
 			return err
 		}
 
-		if len(records[0]) != 12 {
+		if len(records[0]) != 13 {
 			return fmt.Errorf("Invalid file. Please provide the correct file containing fixture events data.")
 		}
 

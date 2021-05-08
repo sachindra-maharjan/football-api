@@ -37,8 +37,18 @@ func (s *FixtureEventService) Add(ctx context.Context, leagueName string, record
 
 	eventMap := map[int]Events{}
 	var events Events
+	var assist string
+	var assistId int
 
 	for _, r := range records {
+
+		if parseInt(r[8]) > 0 {
+			assistId = parseInt(r[8])
+		}
+		if len(r[9]) > 0 {
+			assist = r[9]
+		}
+
 		f := FixtureEvent{}
 		f.LeagueID = parseInt(r[0])
 		f.FixtureID = parseInt(r[1])
@@ -48,8 +58,8 @@ func (s *FixtureEventService) Add(ctx context.Context, leagueName string, record
 		f.TeamName = r[5]
 		f.PlayerID = parseInt(r[6])
 		f.Player = r[7]
-		f.AssistPlayerID = parseInt(r[8])
-		f.AssistedBy = r[9]
+		f.AssistPlayerID = assistId
+		f.AssistedBy = assist
 		f.Type = r[10]
 		f.Detail = r[11]
 		f.Comments = r[12]
