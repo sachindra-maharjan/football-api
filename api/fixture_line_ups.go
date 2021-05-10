@@ -87,37 +87,38 @@ func (f *FixtureLineUpService) Convert(result *FixtureLineUpResult, includeHead 
 //getStartingXIData Returns flat array from an object
 func (service *FixtureLineUpService) getLineup(leagueID int, fixtureID int, team FixtureTeam) []string {
 	var row []string
-	var playerXI string
-	var substitutes string
 	row = append(row, strconv.Itoa(leagueID))
 	row = append(row, strconv.Itoa(fixtureID))
 	row = append(row, strconv.Itoa(team.CoachID))
 	row = append(row, team.Coach)
 	row = append(row, team.Formation)
 
-	playerXI, row = getPlayers(team.StartingXI, row)
+	playerXI, teamID := getPlayers(team.StartingXI, row)
+	row = append(row, strconv.Itoa(teamID))
 	row = append(row, strings.TrimRight(playerXI, "|"))
 
-	substitutes, row = getPlayers(team.Substitute, row)
+	substitutes, _ := getPlayers(team.Substitute, row)
 	row = append(row, strings.TrimRight(substitutes, "|"))
 
 	return row
 }
 
-func getPlayers(players []PlayerInfo, row []string) (string, []string) {
+func getPlayers(players []PlayerInfo, row []string) (string, int) {
 	var playerInfo string
+	var teamID int
 	for i, player := range players {
 		if i == 0 {
-			row = append(row, strconv.Itoa(player.TeamID))
+			teamID = player.PlayerID
 		}
 		playerInfo = playerInfo + fmt.Sprintf("%d-%s-%d-%s|", player.PlayerID, player.PlayerName, player.Number, player.Position)
 	}
-	return playerInfo, row
+	return playerInfo, teamID
 }
 
 //getStartingXIHead Returns the array of head fields
 func (service *FixtureLineUpService) getStartingXIHead() []string {
 	var row []string
+	row = append(row, "league_id")
 	row = append(row, "fixture_id")
 	row = append(row, "coach_id")
 	row = append(row, "coach_name")
