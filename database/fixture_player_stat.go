@@ -3,6 +3,9 @@ package database
 import (
 	"context"
 	"fmt"
+	"strconv"
+
+	"cloud.google.com/go/firestore"
 )
 
 type FixturePlayerStatService dbservice
@@ -17,6 +20,7 @@ type FixturePlayerStat struct {
 type TeamPlayerStat struct {
 	TeamID     int                   `firestore:"team_id,omitempty"`
 	TeamName   string                `firestore:"team_name,omitempty"`
+	PlayerIDs  []int                 `firestore:"player_ids,omitempty"`
 	Statistics map[string]PlayerStat `firestore:"statistics,omitempty"`
 }
 
@@ -83,25 +87,29 @@ func (s *FixturePlayerStatService) Add(ctx context.Context, leagueName string, r
 	fmt.Printf("Adding %d new fixture event data to firestore \n", len(records))
 	batch := s.client.fs.Batch()
 
+	batchSize := 500
 	currentFixture := 0
 	homeTeam := 0
+	var leagueId int
+	var fixtureId int
 	fixturePlayerStat := FixturePlayerStat{}
+
 	for _, r := range records {
-		fixtureId := parseInt(r[1])
+		leagueId = parseInt((r[0]))
+		fixtureId = parseInt(r[1])
 		teamId := parseInt(r[5])
+		batchSize++
 
 		if currentFixture != fixtureId {
+			fmt.Printf("League Id: %d, Current Fixture Id: %d, Next FixureId: %d\n", leagueId, currentFixture, fixtureId)
 			if fixturePlayerStat.FixtureID > 0 {
-				leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
-				docRef := leagueRef.
-					Collection("leagues").
-					Doc("leagueId_" + r[0]).
-					Collection("fixtures").
-					Doc("fixtureId_" + r[1]).
-					Collection("fixture_details").
-					Doc("player-stat")
-				fmt.Printf("importing lineup in %s \n ", docRef.Path)
-				batch.Set(docRef, fixturePlayerStat)
+				s.persist(leagueName, leagueId, currentFixture, batch, fixturePlayerStat)
+
+				//Commit and reset batch when size is 500
+				if batchSize >= 500 {
+					batch.Commit(ctx)
+					batchSize = 0
+				}
 			}
 
 			currentFixture = fixtureId
@@ -121,6 +129,7 @@ func (s *FixturePlayerStatService) Add(ctx context.Context, leagueName string, r
 			if fixturePlayerStat.HomeTeam.Statistics == nil {
 				fixturePlayerStat.HomeTeam.Statistics = make(map[string]PlayerStat)
 			}
+			fixturePlayerStat.HomeTeam.PlayerIDs = append(fixturePlayerStat.HomeTeam.PlayerIDs, parseInt(r[3]))
 			fixturePlayerStat.HomeTeam.Statistics[r[3]] = s.getPlayerStat(r)
 		} else if homeTeam != teamId {
 			fixturePlayerStat.AwayTeam.TeamID = parseInt(r[5])
@@ -128,10 +137,14 @@ func (s *FixturePlayerStatService) Add(ctx context.Context, leagueName string, r
 			if fixturePlayerStat.AwayTeam.Statistics == nil {
 				fixturePlayerStat.AwayTeam.Statistics = make(map[string]PlayerStat)
 			}
+			fixturePlayerStat.AwayTeam.PlayerIDs = append(fixturePlayerStat.AwayTeam.PlayerIDs, parseInt(r[3]))
 			fixturePlayerStat.AwayTeam.Statistics[r[3]] = s.getPlayerStat(r)
 		}
 
 	}
+
+	//persist last fixture data
+	s.persist(leagueName, leagueId, fixtureId, batch, fixturePlayerStat)
 
 	_, err := batch.Commit(ctx)
 	if err != nil {
@@ -181,4 +194,18 @@ func (s *FixturePlayerStatService) getPlayerStat(record []string) PlayerStat {
 	playerstat.Penalty.Missed = parseInt(record[38])
 	playerstat.Penalty.Saved = parseInt(record[39])
 	return playerstat
+}
+
+func (s *FixturePlayerStatService) persist(leagueName string, leagueId int, fixtureId int,
+	batch *firestore.WriteBatch, fixturePlayerStat FixturePlayerStat) {
+	leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
+	docRef := leagueRef.
+		Collection("leagues").
+		Doc("leagueId_" + strconv.Itoa(leagueId)).
+		Collection("fixtures").
+		Doc("fixtureId_" + strconv.Itoa(fixtureId)).
+		Collection("fixture_details").
+		Doc("player_stat")
+	fmt.Printf("importing lineup in %s \n ", docRef.Path)
+	batch.Set(docRef, fixturePlayerStat)
 }
