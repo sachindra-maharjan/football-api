@@ -18,10 +18,9 @@ type FixturePlayerStat struct {
 }
 
 type TeamPlayerStat struct {
-	TeamID     int                   `firestore:"team_id,omitempty"`
-	TeamName   string                `firestore:"team_name,omitempty"`
-	PlayerIDs  []int                 `firestore:"player_ids,omitempty"`
-	Statistics map[string]PlayerStat `firestore:"statistics,omitempty"`
+	TeamID     int          `firestore:"team_id,omitempty"`
+	TeamName   string       `firestore:"team_name,omitempty"`
+	Statistics []PlayerStat `firestore:"statistics,omitempty"`
 }
 
 //PlayerStat contains player statistics for a fixture
@@ -127,18 +126,16 @@ func (s *FixturePlayerStatService) Add(ctx context.Context, leagueName string, r
 			fixturePlayerStat.HomeTeam.TeamID = parseInt(r[5])
 			fixturePlayerStat.HomeTeam.TeamName = r[6]
 			if fixturePlayerStat.HomeTeam.Statistics == nil {
-				fixturePlayerStat.HomeTeam.Statistics = make(map[string]PlayerStat)
+				fixturePlayerStat.HomeTeam.Statistics = []PlayerStat{}
 			}
-			fixturePlayerStat.HomeTeam.PlayerIDs = append(fixturePlayerStat.HomeTeam.PlayerIDs, parseInt(r[3]))
-			fixturePlayerStat.HomeTeam.Statistics[r[3]] = s.getPlayerStat(r)
+			fixturePlayerStat.HomeTeam.Statistics = append(fixturePlayerStat.HomeTeam.Statistics, s.getPlayerStat(r))
 		} else if homeTeam != teamId {
 			fixturePlayerStat.AwayTeam.TeamID = parseInt(r[5])
 			fixturePlayerStat.AwayTeam.TeamName = r[6]
 			if fixturePlayerStat.AwayTeam.Statistics == nil {
-				fixturePlayerStat.AwayTeam.Statistics = make(map[string]PlayerStat)
+				fixturePlayerStat.AwayTeam.Statistics = []PlayerStat{}
 			}
-			fixturePlayerStat.AwayTeam.PlayerIDs = append(fixturePlayerStat.AwayTeam.PlayerIDs, parseInt(r[3]))
-			fixturePlayerStat.AwayTeam.Statistics[r[3]] = s.getPlayerStat(r)
+			fixturePlayerStat.AwayTeam.Statistics = append(fixturePlayerStat.AwayTeam.Statistics, s.getPlayerStat(r))
 		}
 
 	}
