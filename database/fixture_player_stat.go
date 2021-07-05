@@ -76,7 +76,7 @@ type PlayerStat struct {
 
 type Penalty struct {
 	Won      int `firestore:"won,omitempty"`
-	Commited int `firestore:"commited,omitempty"`
+	Commited int `firestore:"committed,omitempty"`
 	Success  int `firestore:"success,omitempty"`
 	Missed   int `firestore:"missed,omitempty"`
 	Saved    int `firestore:"saved,omitempty"`
@@ -100,7 +100,8 @@ func (s *FixturePlayerStatService) Add(ctx context.Context, leagueName string, r
 		batchSize++
 
 		if currentFixture != fixtureId {
-			fmt.Printf("League Id: %d, Current Fixture Id: %d, Next FixureId: %d\n", leagueId, currentFixture, fixtureId)
+			fmt.Printf("League Id: %d, Current Fixture Id: %d, Next FixureId: %d\n",
+				leagueId, currentFixture, fixtureId)
 			if fixturePlayerStat.FixtureID > 0 {
 				s.persist(leagueName, leagueId, currentFixture, batch, fixturePlayerStat)
 
@@ -137,11 +138,12 @@ func (s *FixturePlayerStatService) Add(ctx context.Context, leagueName string, r
 			}
 			fixturePlayerStat.AwayTeam.Statistics = append(fixturePlayerStat.AwayTeam.Statistics, s.getPlayerStat(r))
 		}
-
 	}
 
 	//persist last fixture data
-	s.persist(leagueName, leagueId, fixtureId, batch, fixturePlayerStat)
+	if leagueId > 0 {
+		s.persist(leagueName, leagueId, fixtureId, batch, fixturePlayerStat)
+	}
 
 	_, err := batch.Commit(ctx)
 	if err != nil {
