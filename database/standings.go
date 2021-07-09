@@ -77,7 +77,7 @@ func (service *StandingsService) Add(ctx context.Context, leagueName string, rec
 			Collection("leagues").
 			Doc("leagueId_" + r[0]).
 			Collection("standings").
-			Doc("teamId_" + r[2])
+			Doc(DocWithIDAndName(r[2], r[3]))
 
 		batch.Set(docRef, s)
 	}

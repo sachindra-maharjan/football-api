@@ -80,7 +80,7 @@ func (s *TopScorerService) Add(ctx context.Context, leagueName string, records [
 			Collection("leagues").
 			Doc("leagueId_" + r[0]).
 			Collection("top-scorers").
-			Doc("player_" + r[1])
+			Doc(DocWithIDAndName(r[1], r[2]))
 		batch.Set(docRef, t)
 
 	}

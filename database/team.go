@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
+	"strings"
 )
 
 type TeamService dbservice
@@ -44,7 +45,7 @@ func (s *TeamService) Add(ctx context.Context, leagueName string, records [][]st
 			Collection("leagues").
 			Doc("leagueId_" + r[0]).
 			Collection("teams").
-			Doc("teamId_" + r[1])
+			Doc(DocWithIDAndName(r[1], r[2]))
 		fmt.Printf("importing lineup in %s \n ", docRef.Path)
 		batch.Set(docRef, team)
 	}
@@ -55,4 +56,8 @@ func (s *TeamService) Add(ctx context.Context, leagueName string, records [][]st
 	}
 
 	return nil
+}
+
+func DocWithIDAndName(id, name string) string {
+	return id + "#" + strings.ToUpper(name)
 }
