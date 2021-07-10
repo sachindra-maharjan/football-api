@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"time"
 
 	"cloud.google.com/go/firestore"
 )
@@ -106,9 +107,10 @@ func (s *FixturePlayerStatService) Add(ctx context.Context, leagueName string, r
 				s.persist(leagueName, leagueId, currentFixture, batch, fixturePlayerStat)
 
 				//Commit and reset batch when size is 500
-				if batchSize >= 500 {
+				if batchSize >= 100 {
 					batch.Commit(ctx)
 					batchSize = 0
+					time.Sleep(time.Duration(10) * time.Second)
 				}
 			}
 
@@ -206,5 +208,18 @@ func (s *FixturePlayerStatService) persist(leagueName string, leagueId int, fixt
 		Collection("fixture_details").
 		Doc("player_stat")
 	fmt.Printf("importing lineup in %s \n ", docRef.Path)
+	snapshot, err := docRef.Get(context.Background())
+	if err != nil {
+
+	} else if snapshot.Exists() {
+
+	}
 	batch.Set(docRef, fixturePlayerStat)
+}
+
+func (s *FixturePlayerStatService) SetPlayerStat(ctx context.Context,
+	playerStat PlayerStat, tx *firestore.Transaction) {
+
+	s.client.fs.Collection("football-leagues")
+
 }
