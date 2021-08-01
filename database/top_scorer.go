@@ -9,18 +9,18 @@ type TopScorerService dbservice
 
 //TopScorer contains the top scorer player information
 type TopScorer struct {
-	LeagueID    int    `firestore:"league_id,omitempty"`
-	PlayerID    int    `firestore:"player_id,omitempty"`
-	PlayerName  string `firestore:"player_name,omitempty"`
+	LeagueID    int    `firestore:"leagueId,omitempty"`
+	PlayerID    int    `firestore:"playerId,omitempty"`
+	PlayerName  string `firestore:"playerName,omitempty"`
 	FirstName   string `firestore:"firstname,omitempty"`
 	LastName    string `firestore:"lastname,omitempty"`
 	Position    string `firestore:"position,omitempty"`
 	Nationality string `firestore:"nationality,omitempty"`
-	TeamID      int    `firestore:"team_id,omitempty"`
-	TeamName    string `firestore:"team_name,omitempty"`
+	TeamID      int    `firestore:"teamId,omitempty"`
+	TeamName    string `firestore:"teamName,omitempty"`
 	Games       struct {
 		Appearences   int `firestore:"appearences,omitempty"`
-		MinutesPlayed int `firestore:"minutes_played,omitempty"`
+		MinutesPlayed int `firestore:"minutesPlayed,omitempty"`
 	} `firestore:"games"`
 	Goals struct {
 		Total    int `firestore:"total,omitempty"`
@@ -38,7 +38,7 @@ type TopScorer struct {
 	} `firestore:"penalty"`
 	Cards struct {
 		Yellow       int `firestore:"yello,omitempty"`
-		SecondYellow int `firestore:"second_yellow,omitempty"`
+		SecondYellow int `firestore:"secondYellow,omitempty"`
 		Red          int `firestore:"red,omitempty"`
 	}
 }
@@ -74,7 +74,7 @@ func (s *TopScorerService) Add(ctx context.Context, leagueName string, records [
 		t.Cards.SecondYellow = parseInt(r[20])
 		t.Cards.Red = parseInt(r[21])
 
-		leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
+		leagueRef := s.client.fs.Collection("football").Doc(leagueName)
 
 		docRef := leagueRef.
 			Collection("leagues").

@@ -11,19 +11,19 @@ import (
 type FixtureEventService dbservice
 
 type FixtureEvents struct {
-	HomeTeam []FixtureEvent `firestore:"home_team,omitempty"`
-	AwayTeam []FixtureEvent `firestore:"away_team,omitempty"`
+	HomeTeam []FixtureEvent `firestore:"homeTeam,omitempty"`
+	AwayTeam []FixtureEvent `firestore:"awayTeam,omitempty"`
 }
 
 //FixtureEvent contains the fixture event infromation
 type FixtureEvent struct {
 	Elapsed        int    `firestore:"elapsed"`
 	ElapsedPlus    int    `firestore:"elapsed_plus,omitempty"`
-	TeamID         int    `firestore:"team_id"`
+	TeamID         int    `firestore:"teamId"`
 	TeamName       string `firestore:"teamName"`
-	PlayerID       int    `firestore:"player_id"`
+	PlayerID       int    `firestore:"playerId"`
 	Player         string `firestore:"player"`
-	AssistPlayerID int    `firestore:"assist_id"`
+	AssistPlayerID int    `firestore:"assistId"`
 	AssistedBy     string `firestore:"assist"`
 	Type           string `firestore:"type"`
 	Detail         string `firestore:"detail"`
@@ -128,7 +128,7 @@ func (s *FixtureEventService) Add(ctx context.Context, leagueName string, record
 
 func (s *FixtureEventService) write(leagueName string, leagueId int,
 	fixtureId int, batch *firestore.WriteBatch, events FixtureEvents) {
-	leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
+	leagueRef := s.client.fs.Collection("football").Doc(leagueName)
 	docRef := leagueRef.Collection("leagues").
 		Doc("leagueId_" + strconv.Itoa(leagueId)).
 		Collection("fixtures").
@@ -143,7 +143,7 @@ func (s *FixtureEventService) write(leagueName string, leagueId int,
 
 func (s *FixtureEventService) isHomeTeam(ctx context.Context, leagueName string,
 	leagueId int, fixtureId int, teamId int) (bool, error) {
-	leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
+	leagueRef := s.client.fs.Collection("football").Doc(leagueName)
 	docRef := leagueRef.Collection("leagues").
 		Doc("leagueId_" + strconv.Itoa(leagueId)).
 		Collection("fixtures").

@@ -17,7 +17,7 @@ type FixtureTeams struct {
 //FixtureTeam Fixture Team Info
 type FixtureTeam struct {
 	Coach      string                `firestore:"coach,omitempty"`
-	CoachID    int                   `firestore:"coach_id,omitempty"`
+	CoachID    int                   `firestore:"coachId,omitempty"`
 	Formation  string                `firestore:"formation,omitempty"`
 	TeamID     int                   `firestore:"team_id,omitempty"`
 	StartingXI map[string]PlayerInfo `firestore:"startingXI,omitempty"`
@@ -26,7 +26,7 @@ type FixtureTeam struct {
 
 //Player Starting Player Info
 type PlayerInfo struct {
-	PlayerID   int    `firestore:"player_id,omitempty"`
+	PlayerID   int    `firestore:"playerId,omitempty"`
 	PlayerName string `firestore:"player,omitempty"`
 	Number     int    `firestore:"number,omitempty"`
 	Position   string `firestore:"pos,omitempty"`
@@ -44,7 +44,7 @@ func (s *FixtureLineUpService) Add(ctx context.Context, leagueName string, recor
 			team.HomeTeam = getTeam(r)
 		} else {
 			team.AwayTeam = getTeam(r)
-			leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
+			leagueRef := s.client.fs.Collection("football").Doc(leagueName)
 			docRef := leagueRef.
 				Collection("leagues").
 				Doc("leagueId_" + r[0]).

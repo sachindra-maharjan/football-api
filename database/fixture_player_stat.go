@@ -12,26 +12,26 @@ import (
 type FixturePlayerStatService dbservice
 
 type FixturePlayerStat struct {
-	FixtureID int            `firestore:"fixture_id,omitempty"`
+	FixtureID int            `firestore:"fixtureId,omitempty"`
 	UpdatedAt int64          `firestore:"updateAt,omitempty"`
-	HomeTeam  TeamPlayerStat `firestore:"home_team,omitempty"`
-	AwayTeam  TeamPlayerStat `firestore:"away_team,omitempty"`
+	HomeTeam  TeamPlayerStat `firestore:"homeTeam,omitempty"`
+	AwayTeam  TeamPlayerStat `firestore:"awayTeam,omitempty"`
 }
 
 type TeamPlayerStat struct {
-	TeamID     int          `firestore:"team_id,omitempty"`
-	TeamName   string       `firestore:"team_name,omitempty"`
+	TeamID     int          `firestore:"teamId,omitempty"`
+	TeamName   string       `firestore:"teamName,omitempty"`
 	Statistics []PlayerStat `firestore:"statistics,omitempty"`
 }
 
 //PlayerStat contains player statistics for a fixture
 type PlayerStat struct {
-	PlayerID      int    `firestore:"player_id,omitempty"`
-	PlayerName    string `firestore:"player_name,omitempty"`
+	PlayerID      int    `firestore:"playerId,omitempty"`
+	PlayerName    string `firestore:"playerName,omitempty"`
 	Number        int    `firestore:"number,omitempty"`
 	Position      string `firestore:"position,omitempty"`
 	Rating        string `firestore:"rating,omitempty"`
-	MinutesPlayed int    `firestore:"minutes_played,omitempty"`
+	MinutesPlayed int    `firestore:"minutesPlayed,omitempty"`
 	Captain       string `firestore:"captain,omitempty"`
 	Substitute    string `firestore:"substitute,omitempty"`
 	Offsides      int    `firestore:"offsides,omitempty"`
@@ -199,7 +199,7 @@ func (s *FixturePlayerStatService) getPlayerStat(record []string) PlayerStat {
 
 func (s *FixturePlayerStatService) persist(leagueName string, leagueId int, fixtureId int,
 	batch *firestore.WriteBatch, fixturePlayerStat FixturePlayerStat) {
-	leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
+	leagueRef := s.client.fs.Collection("football").Doc(leagueName)
 	docRef := leagueRef.
 		Collection("leagues").
 		Doc("leagueId_" + strconv.Itoa(leagueId)).
@@ -220,6 +220,6 @@ func (s *FixturePlayerStatService) persist(leagueName string, leagueId int, fixt
 func (s *FixturePlayerStatService) SetPlayerStat(ctx context.Context,
 	playerStat PlayerStat, tx *firestore.Transaction) {
 
-	s.client.fs.Collection("football-leagues")
+	s.client.fs.Collection("football")
 
 }

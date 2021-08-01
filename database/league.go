@@ -12,29 +12,29 @@ import (
 type LeagueService dbservice
 
 type League struct {
-	LeagueID    int    `firestore:"league_id,omitempty"`
+	LeagueID    int    `firestore:"leagueId,omitempty"`
 	Name        string `firestore:"name,omitempty"`
 	LeagueType  string `firestore:"type,omitempty"`
 	Country     string `firestore:"country,omitempty"`
-	CountryCode string `firestore:"country_code,omitempty"`
+	CountryCode string `firestore:"countryCode,omitempty"`
 	LogoURL     string `firestore:"logo,omitempty"`
 }
 
 type Season struct {
-	LeagueID    int       `firestore:"league_id,omitempty"`
+	LeagueID    int       `firestore:"leagueId,omitempty"`
 	Season      string    `firestore:"season,omitempty"`
-	SeasonStart time.Time `firestore:"season_start,omitempty"`
-	SeasonEnd   time.Time `firestore:"season_end,omitempty"`
+	SeasonStart time.Time `firestore:"seasonStart,omitempty"`
+	SeasonEnd   time.Time `firestore:"seasonEnd,omitempty"`
 	FlagURL     string    `firestore:"flag,omitempty"`
 	Standings   bool      `firestore:"standings,omitempty"`
-	IsCurrent   bool      `firestore:"is_current,omitempty"`
+	IsCurrent   bool      `firestore:"isCurrent,omitempty"`
 	Coverage    struct {
 		Standings       bool `firestore:"standings,omitempty"`
 		FixtureCoverage struct {
 			Events           bool `firestore:"events,omitempty"`
 			Lineups          bool `firestore:"lineups,omitempty"`
 			Statistics       bool `firestore:"statistics,omitempty"`
-			PlayerStatistics bool `firestore:"players_statistics,omitempty"`
+			PlayerStatistics bool `firestore:"playersStatistics,omitempty"`
 		} `firestore:"fixtures,omitempty"`
 		Players     bool `firestore:"players,omitempty"`
 		TopScorers  bool `firestore:"topScorers,omitempty"`
@@ -53,7 +53,7 @@ func (s *LeagueService) Add(ctx context.Context, leagueName string, records [][]
 
 		if i == 0 {
 			leagueName := strings.ToLower(strings.ReplaceAll(r[1], " ", ""))
-			leagueRef = s.client.fs.Collection("football-leagues").Doc(leagueName)
+			leagueRef = s.client.fs.Collection("football").Doc(leagueName)
 			l := League{}
 			l.LeagueID = parseInt(r[0])
 			l.Name = r[1]

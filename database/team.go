@@ -9,17 +9,17 @@ import (
 type TeamService dbservice
 
 type Team struct {
-	TeamID        int    `firestore:"team_id,omitempty"`
+	TeamID        int    `firestore:"teamId,omitempty"`
 	Name          string `firestore:"name,omitempty"`
 	Code          string `firestore:"code,omitempty"`
 	Country       string `firestore:"country,omitempty"`
-	IsNational    bool   `firestore:"is_national,omitempty"`
+	IsNational    bool   `firestore:"isNational,omitempty"`
 	Founded       int    `firestore:"founded,omitempty"`
-	VenueName     string `firestore:"veneu_name,omitempty"`
-	VenueSurface  string `firestore:"venue_surface,omitempty"`
-	VenueAddress  string `firestore:"venue_address,omitempty"`
-	VenueCity     string `firestore:"venue_city,omitempty"`
-	VenueCapacity int    `firestore:"venue_capacity,omitempty"`
+	VenueName     string `firestore:"veneuName,omitempty"`
+	VenueSurface  string `firestore:"venueSurface,omitempty"`
+	VenueAddress  string `firestore:"venueAddress,omitempty"`
+	VenueCity     string `firestore:"venueCity,omitempty"`
+	VenueCapacity int    `firestore:"venueCapacity,omitempty"`
 }
 
 func (s *TeamService) Add(ctx context.Context, leagueName string, records [][]string) error {
@@ -40,7 +40,7 @@ func (s *TeamService) Add(ctx context.Context, leagueName string, records [][]st
 			VenueCity:     r[10],
 			VenueCapacity: parseInt(r[11]),
 		}
-		leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
+		leagueRef := s.client.fs.Collection("football").Doc(leagueName)
 		docRef := leagueRef.
 			Collection("leagues").
 			Doc("leagueId_" + r[0]).

@@ -10,26 +10,26 @@ type FixtureService dbservice
 
 //Fixture contains the fixture infromation
 type Fixture struct {
-	FixtureID int `firestore:"fixture_id,omitempty"`
-	LeagueID  int `firestore:"league_id,omitempty"`
+	FixtureID int `firestore:"fixtureId,omitempty"`
+	LeagueID  int `firestore:"leagueId,omitempty"`
 	League    struct {
 		Name    string `firestore:"name,omitempty"`
 		Country string `firestore:"country,omitempty"`
 	} `firestore:"league"`
-	EventDate       time.Time `firestore:"event_date,omitempty"`
-	EventTimestamp  int64     `firestore:"event_timestamp,omitempty"`
-	FirstHalfStart  int64     `firestore:"first_half_start,omitempty"`
-	SecondHalfStart int64     `firestore:"second_half_start,omitempty"`
+	EventDate       time.Time `firestore:"eventDate,omitempty"`
+	EventTimestamp  int64     `firestore:"eventTimestamp,omitempty"`
+	FirstHalfStart  int64     `firestore:"firstHalfStart,omitempty"`
+	SecondHalfStart int64     `firestore:"secondHalfStart,omitempty"`
 	Round           string    `firestore:"round,omitempty"`
 	Status          string    `firestore:"status,omitempty"`
-	StatusShort     string    `firestore:"status_short,omitempty"`
+	StatusShort     string    `firestore:"statusShort,omitempty"`
 	Elapsed         int       `firestore:"elapsed,omitempty"`
 	Venue           string    `firestore:"venue,omitempty"`
 	Referee         string    `firestore:"referee,omitempty,omitempty"`
-	HomeTeam        team      `firestore:"home_team,omitempty"`
-	AwayTeam        team      `firestore:"away_team,omitempty"`
-	GoalsHomeTeam   int       `firestore:"goals_home_team,omitempty"`
-	GoalsAwayTeam   int       `firestore:"goals_away_team,omitempty"`
+	HomeTeam        team      `firestore:"homeTeam,omitempty"`
+	AwayTeam        team      `firestore:"awayTeam,omitempty"`
+	GoalsHomeTeam   int       `firestore:"goalsHomeTeam,omitempty"`
+	GoalsAwayTeam   int       `firestore:"goalsAwayTeam,omitempty"`
 	Score           struct {
 		HalfTime  string `firestore:"halftime,omitempty"`
 		FullTime  string `firestore:"fulltime,omitempty"`
@@ -39,8 +39,8 @@ type Fixture struct {
 }
 
 type team struct {
-	TeamID   int    `firestore:"team_id,omitempty"`
-	TeamName string `firestore:"team_name,omitempty"`
+	TeamID   int    `firestore:"teamId,omitempty"`
+	TeamName string `firestore:"teamName,omitempty"`
 	Logo     string `firestore:"logo,omitempty"`
 }
 
@@ -79,7 +79,7 @@ func (s *FixtureService) Add(ctx context.Context, leagueName string, records [][
 		f.Score.ExtraTime = r[26]
 		f.Score.Penalty = r[27]
 
-		leagueRef := s.client.fs.Collection("football-leagues").Doc(leagueName)
+		leagueRef := s.client.fs.Collection("football").Doc(leagueName)
 
 		docRef := leagueRef.
 			Collection("leagues").

@@ -9,9 +9,9 @@ type StandingsService dbservice
 
 //Standings contains league table stangings
 type Standings struct {
-	LeagueID    int    `firestore:"league_id,omitempty"`
+	LeagueID    int    `firestore:"leagueId,omitempty"`
 	Rank        int    `firestore:"rank,omitempty"`
-	TeamID      int    `firestore:"team_id,omitempty"`
+	TeamID      int    `firestore:"teamId,omitempty"`
 	TeamName    string `firestore:"teamName,omitempty"`
 	Logo        string `firestore:"logo,omitempty"`
 	Group       string `firestore:"group,omitempty"`
@@ -28,7 +28,7 @@ type Standings struct {
 
 //Stat contains  team statistics
 type Stat struct {
-	MatchsPlayed int `firestore:"matchsPlayed,omitempty"`
+	MatchsPlayed int `firestore:"matchesPlayed,omitempty"`
 	Win          int `firestore:"win,omitempty"`
 	Draw         int `firestore:"draw,omitempty"`
 	Lose         int `firestore:"lose,omitempty"`
@@ -71,7 +71,7 @@ func (service *StandingsService) Add(ctx context.Context, leagueName string, rec
 		s.AwayStat.Draw = parseInt(r[24])
 		s.AwayStat.GoalsFor = parseInt(r[25])
 		s.AwayStat.GoalsAgainst = parseInt(r[26])
-		leagueRef := service.client.fs.Collection("football-leagues").Doc(leagueName)
+		leagueRef := service.client.fs.Collection("football").Doc(leagueName)
 
 		docRef := leagueRef.
 			Collection("leagues").
