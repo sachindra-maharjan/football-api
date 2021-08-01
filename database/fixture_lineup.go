@@ -50,7 +50,7 @@ func (s *FixtureLineUpService) Add(ctx context.Context, leagueName string, recor
 				Doc("leagueId_" + r[0]).
 				Collection("fixtures").
 				Doc("fixtureId_" + r[1]).
-				Collection("fixture_details").
+				Collection("fixtureDetails").
 				Doc("lineups")
 			fmt.Printf("importing lineup in %s \n ", docRef.Path)
 			batch.Set(docRef, team)

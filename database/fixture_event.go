@@ -133,7 +133,7 @@ func (s *FixtureEventService) write(leagueName string, leagueId int,
 		Doc("leagueId_" + strconv.Itoa(leagueId)).
 		Collection("fixtures").
 		Doc("fixtureId_" + strconv.Itoa(fixtureId)).
-		Collection("fixture_details").
+		Collection("fixtureDetails").
 		Doc("events")
 
 	fmt.Printf("adding fixture event in %s\n", docRef.Path)

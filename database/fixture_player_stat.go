@@ -205,8 +205,8 @@ func (s *FixturePlayerStatService) persist(leagueName string, leagueId int, fixt
 		Doc("leagueId_" + strconv.Itoa(leagueId)).
 		Collection("fixtures").
 		Doc("fixtureId_" + strconv.Itoa(fixtureId)).
-		Collection("fixture_details").
-		Doc("player_stat")
+		Collection("fixtureDetails").
+		Doc("playerStatistics")
 	fmt.Printf("importing lineup in %s \n ", docRef.Path)
 	snapshot, err := docRef.Get(context.Background())
 	if err != nil {
