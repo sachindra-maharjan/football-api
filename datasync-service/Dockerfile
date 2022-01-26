@@ -10,4 +10,4 @@ RUN go mod download
 
 RUN go build -o datasync-service
 
-CMD [ "/app/datasync-api" ]
+CMD [ "/app/datasync-service" ]
