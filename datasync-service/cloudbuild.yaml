@@ -5,4 +5,4 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/datasync-service:$SHORT_SHA']
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['run', 'deploy', 'storage-api', '--region=us-central1', '--platform=managed', '--image=gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/datasync-service:$SHORT_SHA']
+  args: ['run', 'deploy', 'datasync-service', '--region=us-central1', '--platform=managed', '--image=gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/datasync-service:$SHORT_SHA']
