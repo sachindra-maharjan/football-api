@@ -15,6 +15,8 @@ COPY *.go ./
 
 RUN go build -o datasync-service
 
+RUN chmod +x /app/datasync-service
+
 EXPOSE 8090
 
 CMD [ "/app/datasync-service" ]
