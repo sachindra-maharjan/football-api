@@ -1,4 +1,4 @@
-package datasyncservice
+package main
 
 import (
 	"encoding/json"
