@@ -3,6 +3,8 @@ package client
 import (
 	"casino_royal/vault/api"
 	"context"
+	"os"
+	"strings"
 )
 
 type HttpClient struct {
@@ -10,8 +12,10 @@ type HttpClient struct {
 }
 
 func NewHttpClient() HttpClient {
+	keys := os.Getenv("RAPID_API_KEYS")
+	apiKeys = strings.Split(keys, ",")
 	return HttpClient{
-		client: &api.Client{},
+		client: api.NewClient(nil, apiKeys),
 	}
 }
 
