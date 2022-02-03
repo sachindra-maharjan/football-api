@@ -1,10 +1,12 @@
 package main
 
 import (
+	"casino_royal/vault/client"
 	"encoding/json"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -15,12 +17,36 @@ type Status struct {
 }
 
 func health(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(Status{Status: "Service is running!!!"})
+}
+
+func standings(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r)
+	leagueId := params["leagueId"]
+	id, err := strconv.Atoi(leagueId)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	httpClient := client.NewHttpClient()
+	result, err := httpClient.League(id)
+
+	if err != nil {
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
+	json.NewEncoder(w).Encode(result)
 }
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", health).Methods("GET")
+	router.HandleFunc("/standings/{leagueId}", standings).Methods("GET")
 
 	// [START setting_port]
 	port := os.Getenv("PORT")
