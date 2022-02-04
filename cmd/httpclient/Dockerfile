@@ -13,10 +13,10 @@ RUN go mod download
 
 COPY *.go ./
 
-RUN go build -o datasync
+RUN go build -o httpclient
 
 ## RUN chmod +x /app/datasync
 
 # EXPOSE 8090
 
-CMD [ "/app/datasync" ]
+CMD [ "/app/httpclient" ]
