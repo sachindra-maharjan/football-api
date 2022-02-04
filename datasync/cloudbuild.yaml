@@ -6,6 +6,6 @@ steps:
   args: ['push', 'gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/datasync:$SHORT_SHA']
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: gcloud
-  args: ['run', 'deploy', 'datasync-service', '--region=us-central1', '--platform=managed', '--image=gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/datasync:$SHORT_SHA']
+  args: ['run', 'deploy', 'datasync', '--region=us-central1', '--platform=managed', '--image=gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/datasync:$SHORT_SHA']
 images:
   - "gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/datasync"

@@ -14,7 +14,8 @@ RUN go mod download
 COPY *.go ./
 
 RUN go build -o datasync
-RUN chmod +x /app/datasync
+
+## RUN chmod +x /app/datasync
 
 # EXPOSE 8090
 

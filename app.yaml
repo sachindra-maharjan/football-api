@@ -1,5 +1,5 @@
 runtime: go114
-service: datasync-service
+service: datasync
 
 handlers:
 - url: /.*
