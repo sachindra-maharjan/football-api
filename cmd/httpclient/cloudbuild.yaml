@@ -1,0 +1,11 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/cmd/httpclient:$SHORT_SHA', '.']
+  dir: 'datasync'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/cmd/httpclient:$SHORT_SHA']
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'httpclient', '--region=us-central1', '--platform=managed', '--image=gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/cmd/httpclient:$SHORT_SHA']
+images:
+  - "gcr.io/clouddeveloper-299318/bitbucket.org/sachindramaharjan/vault/cmd/httpclient"
