@@ -5,8 +5,8 @@ ADD . /app
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
+COPY ../../go.mod ./
+COPY ../../go.sum ./
 
 ## Add this go mod download command to pull in any dependencies
 RUN go mod download
