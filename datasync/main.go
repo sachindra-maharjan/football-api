@@ -1,7 +1,7 @@
 package datasync
 
 import (
-	"casino_royal/vault/client"
+	// "casino_royal/vault/client"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -22,25 +22,25 @@ func health(w http.ResponseWriter, r *http.Request) {
 }
 
 func standings(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r)
-	leagueId := params["leagueId"]
-	id, err := strconv.Atoi(leagueId)
+	// w.Header().Set("Content-Type", "application/json")
+	// params := mux.Vars(r)
+	// leagueId := params["leagueId"]
+	// id, err := strconv.Atoi(leagueId)
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err)
-		return
-	}
+	// if err != nil {
+	// 	json.NewEncoder(w).Encode(err)
+	// 	return
+	// }
 
-	httpClient := client.NewHttpClient()
-	result, err := httpClient.League(id)
+	// httpClient := client.NewHttpClient()
+	// result, err := httpClient.League(id)
 
-	if err != nil {
-		json.NewEncoder(w).Encode(err)
-		return
-	}
+	// if err != nil {
+	// 	json.NewEncoder(w).Encode(err)
+	// 	return
+	// }
 
-	json.NewEncoder(w).Encode(result)
+	// json.NewEncoder(w).Encode(result)
 }
 
 func main() {
