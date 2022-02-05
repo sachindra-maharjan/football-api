@@ -7,6 +7,8 @@ RUN mkdir /app
 # ADD . /app
 COPY client /app
 
+RUN ls
+
 WORKDIR /app
 
 COPY go.mod ./
@@ -15,7 +17,8 @@ COPY go.sum ./
 ## Add this go mod download command to pull in any dependencies
 RUN go mod download
 
-RUN echo pwd
+RUN pwd
+RUN ls
 
 # COPY client ./
 RUN cd client/httpclient
