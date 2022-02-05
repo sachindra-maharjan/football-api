@@ -21,7 +21,7 @@ RUN pwd
 RUN ls
 
 # COPY client ./
-RUN cd client/httpclient
+RUN cd httpclient
 
 RUN go build -o httpclient
 
