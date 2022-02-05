@@ -4,10 +4,7 @@ ENV GO111MODULE=on
 ENV PORT=9000
 
 RUN mkdir /app
-# ADD . /app
-COPY client /app
-
-RUN ls
+ADD . /app
 
 WORKDIR /app
 
@@ -17,11 +14,7 @@ COPY go.sum ./
 ## Add this go mod download command to pull in any dependencies
 RUN go mod download
 
-RUN pwd
-RUN ls
-
-# COPY client ./
-RUN cd httpclient
+RUN cd client/httpclient
 
 RUN go build -o httpclient
 
