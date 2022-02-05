@@ -28,4 +28,4 @@ RUN ls
 
 # EXPOSE 8090
 
-CMD [ "/app/client/httpclient" ]
+CMD [ "/app/httpclient" ]
