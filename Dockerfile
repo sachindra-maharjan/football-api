@@ -1,5 +1,8 @@
 FROM golang:1.15-alpine3.12
 
+ENV GO111MODULE=on
+ENV PORT=9000
+
 RUN mkdir /app
 ADD . /app
 
@@ -11,7 +14,8 @@ COPY go.sum ./
 ## Add this go mod download command to pull in any dependencies
 RUN go mod download
 
-COPY *.go ./
+# COPY client ./
+RUN cd client/httpclient
 
 RUN go build -o httpclient
 
@@ -19,4 +23,4 @@ RUN go build -o httpclient
 
 # EXPOSE 8090
 
-CMD [ "/app/httpclient" ]
+CMD [ "/app/client/httpclient" ]
