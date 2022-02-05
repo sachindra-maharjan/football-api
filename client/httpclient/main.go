@@ -3,6 +3,7 @@ package client
 import (
 	"casino_royal/vault/client"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -23,9 +24,12 @@ func health(w http.ResponseWriter, r *http.Request) {
 
 func standings(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+
 	params := mux.Vars(r)
 	leagueId := params["leagueId"]
 	id, err := strconv.Atoi(leagueId)
+
+	fmt.Println("LeagueID: " + leagueId)
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
