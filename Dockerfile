@@ -14,10 +14,15 @@ COPY go.sum ./
 ## Add this go mod download command to pull in any dependencies
 RUN go mod download
 
+RUN echo pwd
+
 # COPY client ./
 RUN cd client/httpclient
 
 RUN go build -o httpclient
+
+RUN pwd
+RUN ls
 
 ## RUN chmod +x /app/datasync
 
