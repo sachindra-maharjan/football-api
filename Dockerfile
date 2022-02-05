@@ -4,7 +4,7 @@ ENV GO111MODULE=on
 ENV PORT=9000
 
 RUN mkdir /app
-ADD . /app
+ADD client /app
 
 WORKDIR /app
 
