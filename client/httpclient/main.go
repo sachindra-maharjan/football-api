@@ -3,7 +3,6 @@ package client
 import (
 	"casino_royal/vault/client"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -29,7 +28,7 @@ func standings(w http.ResponseWriter, r *http.Request) {
 	leagueId := params["leagueId"]
 	id, err := strconv.Atoi(leagueId)
 
-	fmt.Println("LeagueID: " + leagueId)
+	log.Println("LeagueID: " + leagueId)
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
@@ -38,6 +37,8 @@ func standings(w http.ResponseWriter, r *http.Request) {
 
 	httpClient := client.NewHttpClient()
 	result, err := httpClient.League(id)
+
+	log.Printf("Result of standings: %v \n", result)
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err)

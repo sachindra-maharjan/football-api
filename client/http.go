@@ -14,7 +14,7 @@ type HttpClient struct {
 
 func NewHttpClient() HttpClient {
 	keys := os.Getenv("RAPID_API_KEYS")
-	apiKeys = strings.Split(keys, ",")
+	apiKeys := strings.Split(keys, ",")
 
 	fmt.Println("Rapid API Keys: " + keys)
 
