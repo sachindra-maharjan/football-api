@@ -16,7 +16,7 @@ type Status struct {
 
 func health(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(Status{Status: "Service is running!!!"})
+	json.NewEncoder(w).Encode(Status{Status: "Service is running!!"})
 }
 
 func standings(w http.ResponseWriter, r *http.Request) {
